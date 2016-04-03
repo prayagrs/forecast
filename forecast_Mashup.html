@@ -1,0 +1,3426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Forecast Search</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+  <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+  <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.9/jquery.validate.min.js"></script>
+  <script src="http://openlayers.org/api/OpenLayers.js"></script>
+  <script src="moment.js"></script>
+  <script src="moment-timezone-with-data.js"></script>
+  <script src="moment-timezone.min.js"></script>
+  
+</head>
+<style>
+	body{
+  background-image: url('http://cs-server.usc.edu:45678/hw/hw8/images/bg.jpg');
+  background-repeat: no-repeat ;
+  background-size: 1500px; 
+  background-attachment: fixed;
+}
+
+span.mamu{
+  color: rgb(204,204,255);
+}
+span.jhamru{
+  color: rgb(255,255,255);
+}
+
+span.vikrant{
+  color:rgb(0,0,255);
+}
+
+span.gabral{
+ color:rgb(0,102,0);
+}
+
+span.inside{
+    color:rgb(255,0,0);
+}
+
+  .left {
+    margin-left: auto;
+    margin-right: auto;
+    display: block;  
+  }
+.right{
+  margin-left: 450px;
+  
+  display: block;
+}
+.center{
+  width: 200px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.table th, .table td { 
+     border-top: none !important; 
+ }
+
+span.chodu{
+  color: rgb(253,168,0);
+}
+
+#damru{
+  background-color: #000000;
+  
+}
+@media only screen and (max-width: 320px) {
+    #damru {
+          background-color: rgba(0,0,0,0);      
+    }
+}
+
+
+
+</style>
+<script>
+
+window.fbAsyncInit = function() {
+    FB.init({
+      appId      : '872359899550503',
+      xfbml      : true,
+      version    : 'v2.5'
+    });
+  };
+
+  (function(d, s, id){
+     var js, fjs = d.getElementsByTagName(s)[0];
+     if (d.getElementById(id)) {return;}
+     js = d.createElement(s); js.id = id;
+     js.src = "//connect.facebook.net/en_US/sdk.js";
+     fjs.parentNode.insertBefore(js, fjs);
+   }(document, 'script', 'facebook-jssdk'));
+
+function fb_post(output){
+  //alert("inside fb_post");
+ // cit, stat, addr,temp
+ var citti = forecast.city.value;
+                var stattt = forecast.s.value;
+                var deggg = forecast.si.value;
+                var farrr = forecast.us .value;
+                var tempp = "";
+                if (farrr != "")
+                    temppp = farrr;
+                else
+                    temppp = deggg;
+                  
+                
+  var name = "Current weather in " + citti + " "+ stattt;
+  //alert(name);
+  var description = output.currently.summary + ", " + output.currently.temperature + " °F";
+  //alert(description);
+  var pic = output.currently.icon;
+  //alert(pic);
+  var picture2 ="";
+  // if(pic=="clear-night") picture = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/clear_night.png' width='80' height='80' />";
+
+                      if(pic=="clear-day"){picture2 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/clear.png' />";}
+                      if(pic=="clear-night"){picture2 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/clear_night.png'  />";}
+                      if(pic=="rain"){picture2 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/rain.png' />";}
+                      if(pic=="snow"){picture2 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/snow.png' />";}
+                      if(pic=="sleet"){picture2 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/sleet.png'  />";}
+                      if(pic=="wind"){picture2 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/wind.png'  />";}
+                      if(pic=="fog"){picture2 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/fog.png'  />";}
+                      if(pic=="cloudy"){picture2 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/cloudy.png'  />";}
+                      if(pic=="partly-cloudy-day"){picture2 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/cloud_day.png'  />";}
+                      if(pic=="partly-cloudy-night"){picture2 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/cloud_night.png' />";}
+
+
+  //var picture = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/clear.png' width='80' height='80'/>";
+  //alert(picture2);
+  
+                      // var i = output.currently.icon;
+                      // var icon = " ";
+  
+
+var linkArray = ['http://cs-server.usc.edu:45678/hw/hw8/images/clear.png','http://cs-server.usc.edu:45678/hw/hw8/images/clear_night.png','http://cs-server.usc.edu:45678/hw/hw8/images/rain.png','http://cs-server.usc.edu:45678/hw/hw8/images/snow.png','http://cs-server.usc.edu:45678/hw/hw8/images/sleet.png','http://cs-server.usc.edu:45678/hw/hw8/images/wind.png','http://cs-server.usc.edu:45678/hw/hw8/images/fog.png' ,'http://cs-server.usc.edu:45678/hw/hw8/images/cloudy.png','http://cs-server.usc.edu:45678/hw/hw8/images/cloud_day.png','http://cs-server.usc.edu:45678/hw/hw8/images/cloud_night.png'];
+var toPrint="";
+for (var i = 0; i < linkArray.length; i++) 
+{
+    if(picture2.indexOf(linkArray[i])>-1)
+    {
+       // alert("idhar ata");
+        toPrint += linkArray[i];
+    }            
+};            
+  //alert(toPrint);
+
+  FB.ui({
+  method: 'feed',
+  name:name,
+  caption: "WEATHER INFORMATION FROM FORECAST.IO ",
+  description: description,
+  display: 'popup',
+  link:'https://developers.facebook.com/docs/',
+  picture:toPrint
+  },
+  function(response){if(response && response.post_id){
+      alert("Posted Sucessfully");
+            }
+            else
+              {
+              alert("Not Posted");
+              }
+
+  });
+
+  }
+
+
+//fb key :872359899550503
+
+	$(document).ready(function($){
+
+         $("#chaklya").hide();
+         $("#search").on("click", function(){
+            $("#chaklya").show();
+           });
+  
+        // Setup form validation on the #register-form element
+        $("#forecast").validate({
+        
+            // Specify the validation rules
+            rules: {
+                address: "required",
+                city: "required",
+                state:{
+                  required: true
+                }
+            },
+            
+            // Specify the validation error messages
+            messages: {
+                address: "<span style='color:#FF0000;float:left;text-align:left'>" + "Please enter address" + "</span>",
+                city: "<span style='color:#FF0000;float:left'>" + "Please enter city name" + "</span>",
+                state:{
+                    required :"<span style='color:#FF0000;float:left'>" +  "Please select a state" + "</span>"
+
+                }
+            },
+
+             errorPlacement : function(error, element){
+               if(element.attr("name") == "address")
+                 error.insertBefore("#1");
+               else if (element.attr("name") == "city")
+                 error.insertAfter("#2");
+               else
+                error.insertAfter("#3");
+
+             },
+            submitHandler: function(form) {
+               // form.submit();
+               ajaxform(form);
+
+
+
+
+            }
+            
+        });
+
+    });
+
+	function ajaxform(form){
+		$(document).ready(function() {
+      $(document).on('click',function(){
+  $('.collapse').collapse('hide');
+});
+
+});
+	
+     var addr = forecast.address.value;
+                var cit = forecast.city.value;
+                var stat = forecast.s.value;
+                var deg = forecast.si.value;
+                var far = forecast.us .value;
+                var temp = "";
+                if (far != "")
+                    temp = far;
+                else
+                    temp = deg;
+
+                
+                //alert(addr);
+
+          //alert("hiiii");
+           //e.preventDefault();
+          $.ajax({
+
+            type : 'GET',
+            //async:true,
+                    url : 'http://cs-server.usc.edu:30980/index.php',
+                    //url: 'http://forecastweather-env.elasticbeanstalk.com/',
+                        //data : $("#forecast").serialize(),
+                      //alert("Abey yede");
+                    data:{
+                      address:addr, 
+                      city:cit,
+                      state:stat,
+                      temperature:temp
+                    },
+                    
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success:function(result){
+                      
+                      var output = JSON.parse(result);
+                      //alert("Idhar aya");
+
+                      // alert(output);
+                      var lat = output['latitude'];
+                      var lon = output['longitude'];
+                      // alert(lat);
+                      // alert(output.currently.summary);
+                      // alert(output.daily.data[0].temperatureMin);
+
+                      var lonlat = new OpenLayers.LonLat(lon, lat);
+                      // alert(lonlat);
+                      var map = new OpenLayers.Map("bakchod");
+                      // Create OSM overlays
+                      var mapnik = new OpenLayers.Layer.OSM();
+                       var layer_cloud = new OpenLayers.Layer.XYZ("clouds", "http://${s}.tile.openweathermap.org/map/clouds/${z}/${x}/${y}.png",
+                      {
+                          isBaseLayer: false,
+                          opacity: 0.7,
+                          sphericalMercator: true
+                      }
+                  );
+
+                  var layer_precipitation = new OpenLayers.Layer.XYZ(
+                      "precipitation",
+                      "http://${s}.tile.openweathermap.org/map/precipitation/${z}/${x}/${y}.png",
+                      {
+                          isBaseLayer: false,
+                          opacity: 0.7,
+                          sphericalMercator: true
+                      }
+                  );
+
+
+                  map.addLayers([mapnik, layer_precipitation, layer_cloud]);
+                  map.setCenter(lonlat, 10);
+
+
+
+                      /*  Tab 1 - current */
+
+                      var i = output.currently.icon;
+                      var icon = " ";
+                      if(i=="clear-day"){icon = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/clear.png' width='80' height='80'/>";}
+                      if(i=="clear-night"){icon = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/clear_night.png' width='80' height='80' />";}
+                      if(i=="rain"){icon = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/rain.png' width='80' height='80' />";}
+                      if(i=="snow"){icon = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/snow.png' width='80' height='80' />";}
+                      if(i=="sleet"){icon = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/sleet.png' width='80' height='80' />";}
+                      if(i=="wind"){icon = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/wind.png' width='80' height='80' />";}
+                      if(i=="fog"){icon = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/fog.png' width='80' height='80' />";}
+                      if(i=="cloudy"){icon = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/cloudy.png' width='80' height='80' />";}
+                      if(i=="partly-cloudy-day"){icon = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/cloud_day.png' width='80' height='80' />";}
+                      if(i=="partly-cloudy-night"){icon = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/cloud_night.png' width='80' height='80' />";}
+
+                      var sum = output.currently.summary;
+                      var summary = sum + " in " + cit + ", " + stat;
+                       
+                      var te = output.currently.temperature;
+                      var t = " ";
+                       
+                      var ma = output.daily.data[0].temperatureMax;
+                      var max = " ";
+
+                      var mi = output.daily.data[0].temperatureMin;
+                      var min = " ";
+
+                      var precip = output.currently.precipIntensity;
+                      // alert(precip);
+                      var precipitation = " ";
+                      if(precip >= 0 && precip < 0.02){
+                        precipitation = "None";
+                      }
+                      if(precip >= 0.002 && precip < 0.017){
+                        precipitation = "Very Light";
+                      }
+                      if(precip >= 0.017 && precip < 0.1){
+                        precipitation = "Light";
+                      }
+                      if(precip >= 0.1 && precip < 0.4){
+                        precipitation = "Moderate";
+                      }
+                      if(precip >= 0.4){
+                        precipitation = "High";
+                      }                           
+        
+                      var precipProbability = output.currently.precipProbability;
+                      var r = precipProbability * 100;
+                      var rain = r+" "+ "%"; 
+
+                      var win = output.currently.windSpeed;
+                      var windSpeed = " ";
+
+                      var vis = output.currently.visibility;
+                      var visibility = " ";
+                      // var visibility = vis + "mi";
+
+                      /* us and si */
+                      var dew = output.currently.dewPoint;
+                      var dewPoint = "";
+                      if(document.getElementById('us').checked){
+                          dewPoint = dew + " " +"°F";
+                          t = te + " " + "°F";
+                          min = "L: " +" " +mi + "°" ;
+                          max = "H: " +" " +ma + "°";
+                          visibility = vis + "mi"; 
+                          windSpeed = win + "mph"                         
+                      }
+                      else if(document.getElementById('si').checked){
+                          dewPoint = dew + " " + "°C";
+                          t = (((te-32)*5)/9).toFixed(2) + " " + "°C";
+                          min = "L: " +" " +(((mi-32)*5)/9).toFixed(2) + "°";
+                          max = "H: " +" " +(((ma-32)*5)/9).toFixed(2)+ "°";
+                          visibility = (vis * 1.60934).toFixed(2) + "km";
+                          windSpeed = (win * 0.44704).toFixed(2) + "m/s"
+                      } 
+
+                      var hum = output.currently.humidity;
+                      var humidity = hum + "%";
+
+                      var timezone = output['timezone'];
+                      var sunRisee = output.daily.data[0].sunriseTime;
+                      var sunSett = output.daily.data[0].sunsetTime;
+                      
+
+
+                      
+
+                      var sunrisenew = moment(sunRisee*1000).tz(timezone).format('hh:mm A');
+                      
+                      var sunsetnew = moment(sunSett*1000).tz(timezone).format('hh:mm A');
+
+
+                      //day[i] = moment((output.daily.data[i].time)*1000).tz(timezone).format('dddd');
+                      //month[i] = moment((output.daily.data[i].time)*1000).tz(timezone).format('MMM DD');
+                      // var ttt =""; 
+                      //  ttt += "<p> sum </p>" + "<p>" + t + "</p>" + "<p>"+ min + " | " + max + "fb logo " + "</p>" ;
+                      // alert (ttt);
+
+                      var element = document.getElementById("summary");
+                      element.innerHTML = "<p> <span class = 'jhamru'>" + summary  + "</span> </p>" + "<p> <span class = 'jhamru' style='font-size:250%'>" + t + "</span> </p>" + "<p> <span class = 'vikrant' >" + min + "</span>" + " | " + "<span class = 'gabral'>" + max + "</span>" + "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; " +"<a href='javascript:fb_post("+result+");'> <img src='http://cs-server.usc.edu:45678/hw/hw8/images/fb_icon.png' width='30px' height='30px'/> </a>" +"</span> </p>";
+
+
+                      //document.getElementById("summary").innerHTML = summary;
+                      //document.getElementById("t").innerHTML=t;
+                      //document.getElementById("max").innerHTML = max;
+                      //document.getElementById("min").innerHTML = min;
+                      document.getElementById("icon").innerHTML = icon;
+                      document.getElementById("precipitation").innerHTML=precipitation;
+                      document.getElementById("rain").innerHTML=rain;
+                      document.getElementById("wind").innerHTML=windSpeed;
+                      document.getElementById("dew").innerHTML=dewPoint;
+                      document.getElementById("humidity").innerHTML=humidity;
+                      document.getElementById("visibility").innerHTML=visibility;
+                      document.getElementById("sunRisee").innerHTML = sunrisenew;
+                      document.getElementById("sunSett").innerHTML = sunsetnew;
+
+                      /* Tab 2 - next 24 hours */
+
+                      /* first hour */
+                      var su = output.hourly.data[0].icon;
+                      var s = " ";
+                      if(su=="clear-day"){s = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/clear.png' width='40' height='30'/>";}
+                      if(su=="clear-night"){s = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/clear_night.png' width='40' height='30' />";}
+                      if(su=="rain"){s = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/rain.png' width='40' height='30' />";}
+                      if(su=="snow"){s = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/snow.png' width='40' height='30' />";}
+                      if(su=="sleet"){s = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/sleet.png' width='40' height='30' />";}
+                      if(su=="wind"){s = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/wind.png' width='40' height='30' />";}
+                      if(su=="fog"){s = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/fog.png' width='40' height='30' />";}
+                      if(su=="cloudy"){s = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/cloudy.png' width='40' height='30' />";}
+                      if(su=="partly-cloudy-day"){s = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/cloud_day.png' width='40' height='30' />";}
+                      if(su=="partly-cloudy-night"){s = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/cloud_night.png' width='40' height='30' />";}
+
+                      var clo = Math.round(output.hourly.data[0].cloudCover);
+                      var cc1 = clo + " %";
+
+                      var t1 = output.hourly.data[0].temperature;
+                      var timee1 =  moment((output.hourly.data[0].time)*1000).tz(timezone).format('hh:mm A'); 
+                      //alert(timee1);
+
+                      document.getElementById("timee1").innerHTML = timee1;
+                      document.getElementById("s1").innerHTML = s;
+                      document.getElementById("cc1").innerHTML = cc1;
+                      document.getElementById("t1").innerHTML = t1;
+
+                  
+                      /* second hour */
+                      var su1 = output.hourly.data[1].icon;
+                      var s1 = " ";
+                      if(su1=="clear-day"){s1 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/clear.png' width='40' height='30'/>";}
+                      if(su1=="clear-night"){s1 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/clear_night.png' width='40' height='30' />";}
+                      if(su1=="rain"){s1 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/rain.png' width='40' height='30' />";}
+                      if(su1=="snow"){s1 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/snow.png' width='40' height='30' />";}
+                      if(su1=="sleet"){s1 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/sleet.png' width='40' height='30' />";}
+                      if(su1=="wind"){s1 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/wind.png' width='40' height='30' />";}
+                      if(su1=="fog"){s1 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/fog.png' width='40' height='30' />";}
+                      if(su1=="cloudy"){s1 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/cloudy.png' width='40' height='30' />";}
+                      if(su1=="partly-cloudy-day"){s1 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/cloud_day.png' width='40' height='30' />";}
+                      if(su1=="partly-cloudy-night"){s1 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/cloud_night.png' width='40' height='30' />";}
+
+                      var clo1 = Math.round(output.hourly.data[1].cloudCover);
+                      var cc2 = clo1 + " %";
+
+                      var t2 = output.hourly.data[1].temperature;
+                      var timee2 =  moment((output.hourly.data[1].time)*1000).tz(timezone).format('hh:mm A'); 
+
+                      document.getElementById("timee2").innerHTML = timee2;
+
+                      document.getElementById("s2").innerHTML = s1;
+                      document.getElementById("cc2").innerHTML = cc2;
+                      document.getElementById("t2").innerHTML = t2;
+                  
+                      /* third hour */
+                      var su2 = output.hourly.data[2].icon;
+                      var s2 = " ";
+                      if(su2=="clear-day"){s2 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/clear.png' width='40' height='30'/>";}
+                      if(su2=="clear-night"){s2 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/clear_night.png' width='40' height='30' />";}
+                      if(su2=="rain"){s2 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/rain.png' width='40' height='30' />";}
+                      if(su2=="snow"){s2 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/snow.png' width='40' height='30' />";}
+                      if(su2=="sleet"){s2 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/sleet.png' width='40' height='30' />";}
+                      if(su2=="wind"){s2 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/wind.png' width='40' height='30' />";}
+                      if(su2=="fog"){s2 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/fog.png' width='40' height='30' />";}
+                      if(su2=="cloudy"){s2 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/cloudy.png' width='40' height='30' />";}
+                      if(su2=="partly-cloudy-day"){s2 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/cloud_day.png' width='40' height='30' />";}
+                      if(su2=="partly-cloudy-night"){s2 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/cloud_night.png' width='40' height='30' />";}
+
+                      var clo2 = Math.round(output.hourly.data[2].cloudCover);
+                      var cc3 = clo2 + " %";
+
+                      var t3 = output.hourly.data[2].temperature;
+                      var timee3 =  moment((output.hourly.data[2].time)*1000).tz(timezone).format('hh:mm A'); 
+
+                      document.getElementById("timee3").innerHTML = timee3;
+
+                      document.getElementById("s3").innerHTML = s2;
+                      document.getElementById("cc3").innerHTML = cc3;
+                      document.getElementById("t3").innerHTML = t3;
+                                                          
+                      /* forth hour */
+                      var su3 = output.hourly.data[3].icon;
+                      var s3 = " ";
+                      if(su3=="clear-day"){s3 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/clear.png' width='40' height='30'/>";}
+                      if(su3=="clear-night"){s3 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/clear_night.png' width='40' height='30' />";}
+                      if(su3=="rain"){s3 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/rain.png' width='40' height='30' />";}
+                      if(su3=="snow"){s3 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/snow.png' width='40' height='30' />";}
+                      if(su3=="sleet"){s3 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/sleet.png' width='40' height='30' />";}
+                      if(su3=="wind"){s3 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/wind.png' width='40' height='30' />";}
+                      if(su3=="fog"){s3 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/fog.png' width='40' height='30' />";}
+                      if(su3=="cloudy"){s3 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/cloudy.png' width='40' height='30' />";}
+                      if(su3=="partly-cloudy-day"){s3 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/cloud_day.png' width='40' height='30' />";}
+                      if(su3=="partly-cloudy-night"){s3 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/cloud_night.png' width='40' height='30' />";}
+
+                      var clo3 = Math.round(output.hourly.data[3].cloudCover);
+                      var cc4 = clo3 + " %";
+
+                      var t4 = output.hourly.data[3].temperature;
+                      var timee4 =  moment((output.hourly.data[3].time)*1000).tz(timezone).format('hh:mm A'); 
+
+                      document.getElementById("timee4").innerHTML = timee4;
+
+                      document.getElementById("s4").innerHTML = s3;
+                      document.getElementById("cc4").innerHTML = cc4;
+                      document.getElementById("t4").innerHTML = t4;
+                                      
+                      /* fifth hour */
+                      var su4 = output.hourly.data[4].icon;
+                      var s4 = " ";
+                      if(su4=="clear-day"){s4 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/clear.png' width='40' height='30'/>";}
+                      if(su4=="clear-night"){s4 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/clear_night.png' width='40' height='30' />";}
+                      if(su4=="rain"){s4 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/rain.png' width='40' height='30' />";}
+                      if(su4=="snow"){s4 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/snow.png' width='40' height='30' />";}
+                      if(su4=="sleet"){s4 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/sleet.png' width='40' height='30' />";}
+                      if(su4=="wind"){s4 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/wind.png' width='40' height='30' />";}
+                      if(su4=="fog"){s4 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/fog.png' width='40' height='30' />";}
+                      if(su4=="cloudy"){s4 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/cloudy.png' width='40' height='30' />";}
+                      if(su4=="partly-cloudy-day"){s4 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/cloud_day.png' width='40' height='30' />";}
+                      if(su4=="partly-cloudy-night"){s4 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/cloud_night.png' width='40' height='30' />";}
+
+                      var clo4 = Math.round(output.hourly.data[4].cloudCover);
+                      var cc5 = clo4 + " %";
+
+                      var t5 = output.hourly.data[4].temperature;
+                      var timee5 =  moment((output.hourly.data[4].time)*1000).tz(timezone).format('hh:mm A'); 
+
+                      document.getElementById("timee5").innerHTML = timee5;
+
+
+                      document.getElementById("s5").innerHTML = s4;
+                      document.getElementById("cc5").innerHTML = cc5;
+                      document.getElementById("t5").innerHTML = t5;
+                                      
+                      /* sixth hour */
+                      var su5 = output.hourly.data[5].icon;
+                      var s5 = " ";
+                      if(su5=="clear-day"){s5 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/clear.png' width='40' height='30'/>";}
+                      if(su5=="clear-night"){s5 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/clear_night.png' width='40' height='30' />";}
+                      if(su5=="rain"){s5 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/rain.png' width='40' height='30' />";}
+                      if(su5=="snow"){s5 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/snow.png' width='40' height='30' />";}
+                      if(su5=="sleet"){s5 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/sleet.png' width='40' height='30' />";}
+                      if(su5=="wind"){s5 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/wind.png' width='40' height='30' />";}
+                      if(su5=="fog"){s5 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/fog.png' width='40' height='30' />";}
+                      if(su5=="cloudy"){s5 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/cloudy.png' width='40' height='30' />";}
+                      if(su5=="partly-cloudy-day"){s5 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/cloud_day.png' width='40' height='30' />";}
+                      if(su5=="partly-cloudy-night"){s5 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/cloud_night.png' width='40' height='30' />";}
+
+                      var clo5 = Math.round(output.hourly.data[5].cloudCover);
+                      var cc6 = clo5 + " %";
+
+                      var t6 = output.hourly.data[5].temperature;
+                      var timee6 =  moment((output.hourly.data[5].time)*1000).tz(timezone).format('hh:mm A'); 
+
+                      document.getElementById("timee6").innerHTML = timee6;
+
+                      document.getElementById("s6").innerHTML = s5;
+                      document.getElementById("cc6").innerHTML = cc6;
+                      document.getElementById("t6").innerHTML = t6;
+                                      
+                      /* seventh hour */
+                      var su6 = output.hourly.data[6].icon;
+                      var s6 = " ";
+                      if(su6=="clear-day"){s6 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/clear.png' width='40' height='30'/>";}
+                      if(su6=="clear-night"){s6 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/clear_night.png' width='40' height='30' />";}
+                      if(su6=="rain"){s6 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/rain.png' width='40' height='30' />";}
+                      if(su6=="snow"){s6 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/snow.png' width='40' height='30' />";}
+                      if(su6=="sleet"){s6 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/sleet.png' width='40' height='30' />";}
+                      if(su6=="wind"){s6 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/wind.png' width='40' height='30' />";}
+                      if(su6=="fog"){s6 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/fog.png' width='40' height='30' />";}
+                      if(su6=="cloudy"){s6 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/cloudy.png' width='40' height='30' />";}
+                      if(su6=="partly-cloudy-day"){s6 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/cloud_day.png' width='40' height='30' />";}
+                      if(su6=="partly-cloudy-night"){s6 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/cloud_night.png' width='40' height='30' />";}
+
+                      var clo6 = Math.round(output.hourly.data[6].cloudCover);
+                      var cc7 = clo6 + " %";
+
+                      var t7 = output.hourly.data[6].temperature;
+                      var timee7 =  moment((output.hourly.data[6].time)*1000).tz(timezone).format('hh:mm A'); 
+
+                      document.getElementById("timee7").innerHTML = timee7;
+
+                      document.getElementById("s7").innerHTML = s6;
+                      document.getElementById("cc7").innerHTML = cc7;
+                      document.getElementById("t7").innerHTML = t7;
+                                      
+                      /* Eight hour */
+                      var su7 = output.hourly.data[7].icon;
+                      var s7 = " ";
+                      if(su7=="clear-day"){s7 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/clear.png' width='40' height='30'/>";}
+                      if(su7=="clear-night"){s7 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/clear_night.png' width='40' height='30' />";}
+                      if(su7=="rain"){s7 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/rain.png' width='40' height='30' />";}
+                      if(su7=="snow"){s7 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/snow.png' width='40' height='30' />";}
+                      if(su7=="sleet"){s7 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/sleet.png' width='40' height='30' />";}
+                      if(su7=="wind"){s7 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/wind.png' width='40' height='30' />";}
+                      if(su7=="fog"){s7 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/fog.png' width='40' height='30' />";}
+                      if(su7=="cloudy"){s7 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/cloudy.png' width='40' height='30' />";}
+                      if(su7=="partly-cloudy-day"){s7 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/cloud_day.png' width='40' height='30' />";}
+                      if(su7=="partly-cloudy-night"){s7 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/cloud_night.png' width='40' height='30' />";}
+
+                      var clo7 = Math.round(output.hourly.data[7].cloudCover);
+                      var cc8 = clo7 + " %";
+
+                      var t8 = output.hourly.data[7].temperature;
+                      var timee8 =  moment((output.hourly.data[7].time)*1000).tz(timezone).format('hh:mm A'); 
+
+                      document.getElementById("timee8").innerHTML = timee8;
+
+                      document.getElementById("s8").innerHTML = s7;
+                      document.getElementById("cc8").innerHTML = cc8;
+                      document.getElementById("t8").innerHTML = t8;
+                                      
+                      /* Ninth hour */
+                      var su8 = output.hourly.data[8].icon;
+                      var s8 = " ";
+                      if(su8=="clear-day"){s8 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/clear.png' width='40' height='30'/>";}
+                      if(su8=="clear-night"){s8 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/clear_night.png' width='40' height='30' />";}
+                      if(su8=="rain"){s8 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/rain.png' width='40' height='30' />";}
+                      if(su8=="snow"){s8 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/snow.png' width='40' height='30' />";}
+                      if(su8=="sleet"){s8 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/sleet.png' width='40' height='30' />";}
+                      if(su8=="wind"){s8 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/wind.png' width='40' height='30' />";}
+                      if(su8=="fog"){s8 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/fog.png' width='40' height='30' />";}
+                      if(su8=="cloudy"){s8 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/cloudy.png' width='40' height='30' />";}
+                      if(su8=="partly-cloudy-day"){s8 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/cloud_day.png' width='40' height='30' />";}
+                      if(su8=="partly-cloudy-night"){s8 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/cloud_night.png' width='40' height='30' />";}
+
+                      var clo8 = Math.round(output.hourly.data[8].cloudCover);
+                      var cc9 = clo8 + " %";
+
+                      var t9 = output.hourly.data[8].temperature;
+                      var timee9 =  moment((output.hourly.data[8].time)*1000).tz(timezone).format('hh:mm A'); 
+
+                      document.getElementById("timee9").innerHTML = timee9;
+
+                      document.getElementById("s9").innerHTML = s8;
+                      document.getElementById("cc9").innerHTML = cc9;
+                      document.getElementById("t9").innerHTML = t9;
+                                      
+                      /* tenth hour */
+                      var su9 = output.hourly.data[9].icon;
+                      var s9 = " ";
+                      if(su9=="clear-day"){s9 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/clear.png' width='40' height='30'/>";}
+                      if(su9=="clear-night"){s9 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/clear_night.png' width='40' height='30' />";}
+                      if(su9=="rain"){s9 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/rain.png' width='40' height='30' />";}
+                      if(su9=="snow"){s9 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/snow.png' width='40' height='30' />";}
+                      if(su9=="sleet"){s9 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/sleet.png' width='40' height='30' />";}
+                      if(su9=="wind"){s9 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/wind.png' width='40' height='30' />";}
+                      if(su9=="fog"){s9 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/fog.png' width='40' height='30' />";}
+                      if(su9=="cloudy"){s9 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/cloudy.png' width='40' height='30' />";}
+                      if(su9=="partly-cloudy-day"){s9 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/cloud_day.png' width='40' height='30' />";}
+                      if(su9=="partly-cloudy-night"){s9 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/cloud_night.png' width='40' height='30' />";}
+
+                      var clo9 = Math.round(output.hourly.data[9].cloudCover);
+                      var cc10 = clo9 + " %";
+
+                      var t10 = output.hourly.data[9].temperature;
+                      var timee10 =  moment((output.hourly.data[9].time)*1000).tz(timezone).format('hh:mm A'); 
+
+                      document.getElementById("timee10").innerHTML = timee10;
+
+                      document.getElementById("s10").innerHTML = s9;
+                      document.getElementById("cc10").innerHTML = cc10;
+                      document.getElementById("t10").innerHTML = t10;
+                                      
+                      /* Eleventh hour */
+                      var su10 = output.hourly.data[10].icon;
+                      var s10 = " ";
+                      if(su10=="clear-day"){s10 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/clear.png' width='40' height='30'/>";}
+                      if(su10=="clear-night"){s10 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/clear_night.png' width='40' height='30' />";}
+                      if(su10=="rain"){s10 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/rain.png' width='40' height='30' />";}
+                      if(su10=="snow"){s10 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/snow.png' width='40' height='30' />";}
+                      if(su10=="sleet"){s10 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/sleet.png' width='40' height='30' />";}
+                      if(su10=="wind"){s10 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/wind.png' width='40' height='30' />";}
+                      if(su10=="fog"){s10 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/fog.png' width='40' height='30' />";}
+                      if(su10=="cloudy"){s10 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/cloudy.png' width='40' height='30' />";}
+                      if(su10=="partly-cloudy-day"){s10 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/cloud_day.png' width='40' height='30' />";}
+                      if(su10=="partly-cloudy-night"){s10 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/cloud_night.png' width='40' height='30' />";}
+
+                      var clo10 = Math.round(output.hourly.data[10].cloudCover);
+                      var cc11 = clo10 + " %";
+
+                      var t11 = output.hourly.data[10].temperature;
+                      var timee11 =  moment((output.hourly.data[10].time)*1000).tz(timezone).format('hh:mm A'); 
+
+                      document.getElementById("timee11").innerHTML = timee11;
+
+                      document.getElementById("s11").innerHTML = s10;
+                      document.getElementById("cc11").innerHTML = cc11;
+                      document.getElementById("t11").innerHTML = t11;
+                                      
+                      /* twelfth hour */
+                      var su11 = output.hourly.data[11].icon;
+                      var s11 = " ";
+                      if(su11=="clear-day"){s11 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/clear.png' width='40' height='30'/>";}
+                      if(su11=="clear-night"){s11 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/clear_night.png' width='40' height='30' />";}
+                      if(su11=="rain"){s11 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/rain.png' width='40' height='30' />";}
+                      if(su11=="snow"){s11 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/snow.png' width='40' height='30' />";}
+                      if(su11=="sleet"){s11 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/sleet.png' width='40' height='30' />";}
+                      if(su11=="wind"){s11 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/wind.png' width='40' height='30' />";}
+                      if(su11=="fog"){s11 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/fog.png' width='40' height='30' />";}
+                      if(su11=="cloudy"){s11 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/cloudy.png' width='40' height='30' />";}
+                      if(su11=="partly-cloudy-day"){s11 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/cloud_day.png' width='40' height='30' />";}
+                      if(su11=="partly-cloudy-night"){s11 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/cloud_night.png' width='40' height='30' />";}
+
+                      var clo11 = Math.round(output.hourly.data[11].cloudCover);
+                      var cc12 = clo11 + " %";
+
+                      var t12 = output.hourly.data[11].temperature;
+                      var timee12 =  moment((output.hourly.data[11].time)*1000).tz(timezone).format('hh:mm A'); 
+
+                      document.getElementById("timee12").innerHTML = timee12;
+
+                      document.getElementById("s12").innerHTML = s11;
+                      document.getElementById("cc12").innerHTML = cc12;
+                      document.getElementById("t12").innerHTML = t12;
+                                      
+                      /* thirteenth hour */
+                      var su12 = output.hourly.data[12].icon;
+                      var s12 = " ";
+                      if(su12=="clear-day"){s12 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/clear.png' width='40' height='30'/>";}
+                      if(su12=="clear-night"){s12 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/clear_night.png' width='40' height='30' />";}
+                      if(su12=="rain"){s12 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/rain.png' width='40' height='30' />";}
+                      if(su12=="snow"){s12 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/snow.png' width='40' height='30' />";}
+                      if(su12=="sleet"){s12 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/sleet.png' width='40' height='30' />";}
+                      if(su12=="wind"){s12 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/wind.png' width='40' height='30' />";}
+                      if(su12=="fog"){s12 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/fog.png' width='40' height='30' />";}
+                      if(su12=="cloudy"){s12 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/cloudy.png' width='40' height='30' />";}
+                      if(su12=="partly-cloudy-day"){s12 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/cloud_day.png' width='40' height='30' />";}
+                      if(su12=="partly-cloudy-night"){s12 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/cloud_night.png' width='40' height='30' />";}
+
+                      var clo12 = Math.round(output.hourly.data[12].cloudCover);
+                      var cc13 = clo12 + " %";
+
+                      var t13 = output.hourly.data[12].temperature;
+                      var timee13 =  moment((output.hourly.data[12].time)*1000).tz(timezone).format('hh:mm A'); 
+
+                      document.getElementById("timee13").innerHTML = timee13;
+
+                      document.getElementById("s13").innerHTML = s12;
+                      document.getElementById("cc13").innerHTML = cc13;
+                      document.getElementById("t13").innerHTML = t13;
+                                      
+                      /* fourteenth hour */
+                      var su13 = output.hourly.data[13].icon;
+                      var s13 = " ";
+                      if(su13=="clear-day"){s13 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/clear.png' width='40' height='30'/>";}
+                      if(su13=="clear-night"){s13 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/clear_night.png' width='40' height='30' />";}
+                      if(su13=="rain"){s13 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/rain.png' width='40' height='30' />";}
+                      if(su13=="snow"){s13 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/snow.png' width='40' height='30' />";}
+                      if(su13=="sleet"){s13 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/sleet.png' width='40' height='30' />";}
+                      if(su13=="wind"){s13 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/wind.png' width='40' height='30' />";}
+                      if(su13=="fog"){s13 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/fog.png' width='40' height='30' />";}
+                      if(su13=="cloudy"){s13 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/cloudy.png' width='40' height='30' />";}
+                      if(su13=="partly-cloudy-day"){s13 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/cloud_day.png' width='40' height='30' />";}
+                      if(su13=="partly-cloudy-night"){s13 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/cloud_night.png' width='40' height='30' />";}
+
+                      var clo13 = Math.round(output.hourly.data[13].cloudCover);
+                      var cc14 = clo13 + " %";
+
+                      var t14 = output.hourly.data[13].temperature;
+                      var timee14 =  moment((output.hourly.data[13].time)*1000).tz(timezone).format('hh:mm A'); 
+
+                      document.getElementById("timee14").innerHTML = timee14;
+
+                      document.getElementById("s14").innerHTML = s13;
+                      document.getElementById("cc14").innerHTML = cc14;
+                      document.getElementById("t14").innerHTML = t14;
+                                      
+                      /* fifteenth hour */
+                      var su14 = output.hourly.data[14].icon;
+                      var s14 = " ";
+                      if(su14=="clear-day"){s14 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/clear.png' width='40' height='30'/>";}
+                      if(su14=="clear-night"){s14 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/clear_night.png' width='40' height='30' />";}
+                      if(su14=="rain"){s14 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/rain.png' width='40' height='30' />";}
+                      if(su14=="snow"){s14 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/snow.png' width='40' height='30' />";}
+                      if(su14=="sleet"){s14 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/sleet.png' width='40' height='30' />";}
+                      if(su14=="wind"){s14 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/wind.png' width='40' height='30' />";}
+                      if(su14=="fog"){s14 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/fog.png' width='40' height='30' />";}
+                      if(su14=="cloudy"){s14 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/cloudy.png' width='40' height='30' />";}
+                      if(su14=="partly-cloudy-day"){s14 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/cloud_day.png' width='40' height='30' />";}
+                      if(su14=="partly-cloudy-night"){s14 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/cloud_night.png' width='40' height='30' />";}
+
+                      var clo14 = Math.round(output.hourly.data[14].cloudCover);
+                      var cc15 = clo14 + " %";
+
+                      var t15 = output.hourly.data[14].temperature;
+                      var timee15 =  moment((output.hourly.data[14].time)*1000).tz(timezone).format('hh:mm A'); 
+
+                      document.getElementById("timee15").innerHTML = timee15;
+
+                      document.getElementById("s15").innerHTML = s14;
+                      document.getElementById("cc15").innerHTML = cc15;
+                      document.getElementById("t15").innerHTML = t15;
+                                      
+                      /* sixteenth hour */
+                      var su15 = output.hourly.data[15].icon;
+                      var s15 = " ";
+                      if(su15=="clear-day"){s15 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/clear.png' width='40' height='30'/>";}
+                      if(su15=="clear-night"){s15 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/clear_night.png' width='40' height='30' />";}
+                      if(su15=="rain"){s15 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/rain.png' width='40' height='30' />";}
+                      if(su15=="snow"){s15 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/snow.png' width='40' height='30' />";}
+                      if(su15=="sleet"){s15 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/sleet.png' width='40' height='30' />";}
+                      if(su15=="wind"){s15 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/wind.png' width='40' height='30' />";}
+                      if(su15=="fog"){s15 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/fog.png' width='40' height='30' />";}
+                      if(su15=="cloudy"){s15 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/cloudy.png' width='40' height='30' />";}
+                      if(su15=="partly-cloudy-day"){s15 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/cloud_day.png' width='40' height='30' />";}
+                      if(su15=="partly-cloudy-night"){s15 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/cloud_night.png' width='40' height='30' />";}
+
+                      var clo15 = Math.round(output.hourly.data[15].cloudCover);
+                      var cc16 = clo15 + " %";
+
+                      var t16 = output.hourly.data[15].temperature;
+                      var timee16 =  moment((output.hourly.data[15].time)*1000).tz(timezone).format('hh:mm A'); 
+
+                      document.getElementById("timee16").innerHTML = timee16;
+
+                      document.getElementById("s16").innerHTML = s15;
+                      document.getElementById("cc16").innerHTML = cc16;
+                      document.getElementById("t16").innerHTML = t16;
+                                      
+                      /* seventeenth hour */
+                      var su16 = output.hourly.data[16].icon;
+                      var s16 = " ";
+                      if(su16=="clear-day"){s16 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/clear.png' width='40' height='30'/>";}
+                      if(su16=="clear-night"){s16 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/clear_night.png' width='40' height='30' />";}
+                      if(su16=="rain"){s16 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/rain.png' width='40' height='30' />";}
+                      if(su16=="snow"){s16 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/snow.png' width='40' height='30' />";}
+                      if(su16=="sleet"){s16 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/sleet.png' width='40' height='30' />";}
+                      if(su16=="wind"){s16 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/wind.png' width='40' height='30' />";}
+                      if(su16=="fog"){s16 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/fog.png' width='40' height='30' />";}
+                      if(su16=="cloudy"){s16 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/cloudy.png' width='40' height='30' />";}
+                      if(su16=="partly-cloudy-day"){s16 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/cloud_day.png' width='40' height='30' />";}
+                      if(su16=="partly-cloudy-night"){s16 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/cloud_night.png' width='40' height='30' />";}
+
+                      var clo16 = Math.round(output.hourly.data[16].cloudCover);
+                      var cc17 = clo16 + " %";
+
+                      var t17 = output.hourly.data[16].temperature;
+                      var timee17 =  moment((output.hourly.data[16].time)*1000).tz(timezone).format('hh:mm A'); 
+
+                      document.getElementById("timee17").innerHTML = timee17;
+
+                      document.getElementById("s17").innerHTML = s16;
+                      document.getElementById("cc17").innerHTML = cc17;
+                      document.getElementById("t17").innerHTML = t17;
+                                      
+                      /* Eighteenth hour */
+                      var su17 = output.hourly.data[17].icon;
+                      var s17 = " ";
+                      if(su17=="clear-day"){s17 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/clear.png' width='40' height='30'/>";}
+                      if(su17=="clear-night"){s17 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/clear_night.png' width='40' height='30' />";}
+                      if(su17=="rain"){s17 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/rain.png' width='40' height='30' />";}
+                      if(su17=="snow"){s17 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/snow.png' width='40' height='30' />";}
+                      if(su17=="sleet"){s17 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/sleet.png' width='40' height='30' />";}
+                      if(su17=="wind"){s17 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/wind.png' width='40' height='30' />";}
+                      if(su17=="fog"){s17 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/fog.png' width='40' height='30' />";}
+                      if(su17=="cloudy"){s17 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/cloudy.png' width='40' height='30' />";}
+                      if(su17=="partly-cloudy-day"){s17 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/cloud_day.png' width='40' height='30' />";}
+                      if(su17=="partly-cloudy-night"){s17 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/cloud_night.png' width='40' height='30' />";}
+
+                      var clo17 = Math.round(output.hourly.data[17].cloudCover);
+                      var cc18 = clo17 + " %";
+
+                      var t18 = output.hourly.data[17].temperature;
+                      var timee18 =  moment((output.hourly.data[17].time)*1000).tz(timezone).format('hh:mm A'); 
+
+                      document.getElementById("timee18").innerHTML = timee18;
+
+                      document.getElementById("s18").innerHTML = s17;
+                      document.getElementById("cc18").innerHTML = cc18;
+                      document.getElementById("t18").innerHTML = t18;
+                                      
+                      /* Nineteenth hour */
+                      var su18 = output.hourly.data[18].icon;
+                      var s18 = " ";
+                      if(su18=="clear-day"){s18 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/clear.png' width='40' height='30'/>";}
+                      if(su18=="clear-night"){s18 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/clear_night.png' width='40' height='30' />";}
+                      if(su18=="rain"){s18 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/rain.png' width='40' height='30' />";}
+                      if(su18=="snow"){s18 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/snow.png' width='40' height='30' />";}
+                      if(su18=="sleet"){s18 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/sleet.png' width='40' height='30' />";}
+                      if(su18=="wind"){s18 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/wind.png' width='40' height='30' />";}
+                      if(su18=="fog"){s18 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/fog.png' width='40' height='30' />";}
+                      if(su18=="cloudy"){s18 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/cloudy.png' width='40' height='30' />";}
+                      if(su18=="partly-cloudy-day"){s18 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/cloud_day.png' width='40' height='30' />";}
+                      if(su18=="partly-cloudy-night"){s18 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/cloud_night.png' width='40' height='30' />";}
+
+                      var clo18 = Math.round(output.hourly.data[18].cloudCover);
+                      var cc19 = clo18 + " %";
+
+                      var t19 = output.hourly.data[18].temperature;
+                      var timee19 =  moment((output.hourly.data[18].time)*1000).tz(timezone).format('hh:mm A'); 
+
+                      document.getElementById("timee19").innerHTML = timee19;
+
+                      document.getElementById("s19").innerHTML = s1;
+                      document.getElementById("cc19").innerHTML = cc2;
+                      document.getElementById("t19").innerHTML = t2;
+                                      
+                      /* Twentieth hour */
+                      var su19 = output.hourly.data[19].icon;
+                      var s19 = " ";
+                      if(su19=="clear-day"){s19 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/clear.png' width='40' height='30'/>";}
+                      if(su19=="clear-night"){s19 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/clear_night.png' width='40' height='30' />";}
+                      if(su19=="rain"){s19 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/rain.png' width='40' height='30' />";}
+                      if(su19=="snow"){s19 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/snow.png' width='40' height='30' />";}
+                      if(su19=="sleet"){s19 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/sleet.png' width='40' height='30' />";}
+                      if(su19=="wind"){s19 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/wind.png' width='40' height='30' />";}
+                      if(su19=="fog"){s19 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/fog.png' width='40' height='30' />";}
+                      if(su19=="cloudy"){s19 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/cloudy.png' width='40' height='30' />";}
+                      if(su19=="partly-cloudy-day"){s19 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/cloud_day.png' width='40' height='30' />";}
+                      if(su19=="partly-cloudy-night"){s19 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/cloud_night.png' width='40' height='30' />";}
+
+                      var clo19 = Math.round(output.hourly.data[19].cloudCover);
+                      var cc20 = clo19 + " %";
+
+                      var t20 = output.hourly.data[19].temperature;
+                      var timee20 =  moment((output.hourly.data[19].time)*1000).tz(timezone).format('hh:mm A'); 
+
+                      document.getElementById("timee20").innerHTML = timee20;
+
+                      document.getElementById("s20").innerHTML = s19;
+                      document.getElementById("cc20").innerHTML = cc20;
+                      document.getElementById("t20").innerHTML = t20;
+                                      
+                      /*twenty first hour */
+                      var su20 = output.hourly.data[20].icon;
+                      var s20 = " ";
+                      if(su20=="clear-day"){s20 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/clear.png' width='40' height='30'/>";}
+                      if(su20=="clear-night"){s20 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/clear_night.png' width='40' height='30' />";}
+                      if(su20=="rain"){s20 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/rain.png' width='40' height='30' />";}
+                      if(su20=="snow"){s20 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/snow.png' width='40' height='30' />";}
+                      if(su20=="sleet"){s20 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/sleet.png' width='40' height='30' />";}
+                      if(su20=="wind"){s20 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/wind.png' width='40' height='30' />";}
+                      if(su20=="fog"){s20 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/fog.png' width='40' height='30' />";}
+                      if(su20=="cloudy"){s20 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/cloudy.png' width='40' height='30' />";}
+                      if(su20=="partly-cloudy-day"){s20 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/cloud_day.png' width='40' height='30' />";}
+                      if(su20=="partly-cloudy-night"){s20 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/cloud_night.png' width='40' height='30' />";}
+
+                      var clo20 = Math.round(output.hourly.data[20].cloudCover);
+                      var cc21 = clo20 + " %";
+
+                      var t21 = output.hourly.data[20].temperature;
+                      var timee21 =  moment((output.hourly.data[20].time)*1000).tz(timezone).format('hh:mm A'); 
+
+                      document.getElementById("timee21").innerHTML = timee21;
+
+                      document.getElementById("s21").innerHTML = s20;
+                      document.getElementById("cc21").innerHTML = cc21;
+                      document.getElementById("t21").innerHTML = t21;
+                                      
+                      /* twenty second hour */
+                      var su21 = output.hourly.data[21].icon;
+                      var s21 = " ";
+                      if(su21=="clear-day"){s21 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/clear.png' width='40' height='30'/>";}
+                      if(su21=="clear-night"){s21 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/clear_night.png' width='40' height='30' />";}
+                      if(su21=="rain"){s21 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/rain.png' width='40' height='30' />";}
+                      if(su21=="snow"){s21 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/snow.png' width='40' height='30' />";}
+                      if(su21=="sleet"){s21 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/sleet.png' width='40' height='30' />";}
+                      if(su21=="wind"){s21 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/wind.png' width='40' height='30' />";}
+                      if(su21=="fog"){s21 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/fog.png' width='40' height='30' />";}
+                      if(su21=="cloudy"){s21 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/cloudy.png' width='40' height='30' />";}
+                      if(su21=="partly-cloudy-day"){s21 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/cloud_day.png' width='40' height='30' />";}
+                      if(su21=="partly-cloudy-night"){s21 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/cloud_night.png' width='40' height='30' />";}
+
+                      var clo21 = Math.round(output.hourly.data[21].cloudCover);
+                      var cc22 = clo21 + " %";
+
+                      var t22 = output.hourly.data[21].temperature;
+                      var timee22 =  moment((output.hourly.data[21].time)*1000).tz(timezone).format('hh:mm A'); 
+
+                      document.getElementById("timee22").innerHTML = timee22;
+
+                      document.getElementById("s22").innerHTML = s21;
+                      document.getElementById("cc22").innerHTML = cc22;
+                      document.getElementById("t22").innerHTML = t22;
+                                      
+                      /* twenty third hour */
+                      var su22 = output.hourly.data[22].icon;
+                      var s22 = " ";
+                      if(su22=="clear-day"){s22 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/clear.png' width='40' height='30'/>";}
+                      if(su22=="clear-night"){s22 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/clear_night.png' width='40' height='30' />";}
+                      if(su22=="rain"){s22 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/rain.png' width='40' height='30' />";}
+                      if(su22=="snow"){s22 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/snow.png' width='40' height='30' />";}
+                      if(su22=="sleet"){s22 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/sleet.png' width='40' height='30' />";}
+                      if(su22=="wind"){s22 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/wind.png' width='40' height='30' />";}
+                      if(su22=="fog"){s22 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/fog.png' width='40' height='30' />";}
+                      if(su22=="cloudy"){s22 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/cloudy.png' width='40' height='30' />";}
+                      if(su22=="partly-cloudy-day"){s22 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/cloud_day.png' width='40' height='30' />";}
+                      if(su22=="partly-cloudy-night"){s22 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/cloud_night.png' width='40' height='30' />";}
+
+                      var clo22 = Math.round(output.hourly.data[22].cloudCover);
+                      var cc23 = clo1 + " %";
+
+                      var t23 = output.hourly.data[22].temperature;
+                      var timee23 =  moment((output.hourly.data[22].time)*1000).tz(timezone).format('hh:mm A'); 
+
+                      document.getElementById("timee23").innerHTML = timee23;
+
+                      document.getElementById("s23").innerHTML = s22;
+                      document.getElementById("cc23").innerHTML = cc23;
+                      document.getElementById("t23").innerHTML = t23;
+                                      
+                      /* twenty forth hour */
+                      var su23 = output.hourly.data[23].icon;
+                      var s23 = " ";
+                      if(su23=="clear-day"){s23 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/clear.png' width='40' height='30'/>";}
+                      if(su23=="clear-night"){s23 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/clear_night.png' width='40' height='30' />";}
+                      if(su23=="rain"){s23 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/rain.png' width='40' height='30' />";}
+                      if(su23=="snow"){s23 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/snow.png' width='40' height='30' />";}
+                      if(su23=="sleet"){s23 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/sleet.png' width='40' height='30' />";}
+                      if(su23=="wind"){s23 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/wind.png' width='40' height='30' />";}
+                      if(su23=="fog"){s23 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/fog.png' width='40' height='30' />";}
+                      if(su23=="cloudy"){s23 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/cloudy.png' width='40' height='30' />";}
+                      if(su23=="partly-cloudy-day"){s23 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/cloud_day.png' width='40' height='30' />";}
+                      if(su23=="partly-cloudy-night"){s23 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/cloud_night.png' width='40' height='30' />";}
+
+                      var clo23 = Math.round(output.hourly.data[23].cloudCover);
+                      var cc24 = clo1 + " %";
+
+                      var t24 = output.hourly.data[23].temperature;
+                      var timee24 =  moment((output.hourly.data[23].time)*1000).tz(timezone).format('hh:mm A'); 
+
+                      document.getElementById("timee24").innerHTML = timee24;
+
+                      document.getElementById("s24").innerHTML = s23;
+                      document.getElementById("cc24").innerHTML = cc24;
+                      document.getElementById("t24").innerHTML = t24;
+
+                      /* Collapse feature */
+
+                      var w1 = output.hourly.data[0].windSpeed;
+                      var wind1 = w1 + "  mph" ;
+
+                      var hu1 = Math.round(output.hourly.data[0].humidity);
+                      var humidity1 = hu1 + " %";
+
+                      var v1 = output.hourly.data[0].visibility;
+                      var visible1 = v1 + " mi";
+
+                      var p1 = output.hourly.data[0].pressure;
+                      var pressure1 = p1 + " mb";
+
+                      document.getElementById("wind1").innerHTML = wind1;
+                      document.getElementById("humidity1").innerHTML = humidity1;
+                      document.getElementById("visible1").innerHTML = visible1;
+                      document.getElementById("pressure1").innerHTML = pressure1;
+                    
+                      /* second */
+                      var w2 = output.hourly.data[1].windSpeed;
+                      var wind2 = w2 + "  mph" ;
+
+                      var hu2 = Math.round(output.hourly.data[1].humidity);
+                      var humidity2 = hu2 + " %";
+
+                      var v2 = output.hourly.data[1].visibility;
+                      var visible2 = v2 + " mi";
+
+                      var p2 = output.hourly.data[1].pressure;
+                      var pressure2 = p2 + " mb";
+
+                      document.getElementById("wind2").innerHTML = wind2;
+                      document.getElementById("humidity2").innerHTML = humidity2;
+                      document.getElementById("visible2").innerHTML = visible2;
+                      document.getElementById("pressure2").innerHTML = pressure2;
+
+                      /* third */
+                      var w3 = output.hourly.data[2].windSpeed;
+                      var wind3 = w3 + "  mph" ;
+
+                      var hu3 = Math.round(output.hourly.data[2].humidity);
+                      var humidity3 = hu3 + " %";
+
+                      var v3 = output.hourly.data[2].visibility;
+                      var visible3 = v3 + " mi";
+
+                      var p3 = output.hourly.data[2].pressure;
+                      var pressure3 = p3 + " mb";
+
+                      document.getElementById("wind3").innerHTML = wind3;
+                      document.getElementById("humidity3").innerHTML = humidity3;
+                      document.getElementById("visible3").innerHTML = visible3;
+                      document.getElementById("pressure3").innerHTML = pressure3;
+
+                      /* fourth */
+                      var w4 = output.hourly.data[3].windSpeed;
+                      var wind4 = w4 + "  mph" ;
+
+                      var hu4 = Math.round(output.hourly.data[3].humidity);
+                      var humidity4 = hu4 + " %";
+
+                      var v4 = output.hourly.data[3].visibility;
+                      var visible4 = v4 + " mi";
+
+                      var p4 = output.hourly.data[3].pressure;
+                      var pressure4 = p4 + " mb";
+
+                      document.getElementById("wind4").innerHTML = wind4;
+                      document.getElementById("humidity4").innerHTML = humidity4;
+                      document.getElementById("visible4").innerHTML = visible4;
+                      document.getElementById("pressure4").innerHTML = pressure4;
+
+                      /* fifth */
+                      var w5 = output.hourly.data[4].windSpeed;
+                      var wind5 = w5 + "  mph" ;
+
+                      var hu5 = Math.round(output.hourly.data[4].humidity);
+                      var humidity5 = hu5 + " %";
+
+                      var v5 = output.hourly.data[4].visibility;
+                      var visible5 = v5 + " mi";
+
+                      var p5 = output.hourly.data[4].pressure;
+                      var pressure5 = p5 + " mb";
+
+                      document.getElementById("wind5").innerHTML = wind5;
+                      document.getElementById("humidity5").innerHTML = humidity5;
+                      document.getElementById("visible5").innerHTML = visible5;
+                      document.getElementById("pressure5").innerHTML = pressure5;
+
+                      /* sixth */
+                      var w6 = output.hourly.data[5].windSpeed;
+                      var wind6 = w6 + "  mph" ;
+
+                      var hu6 = Math.round(output.hourly.data[5].humidity);
+                      var humidity6 = hu6 + " %";
+
+                      var v6 = output.hourly.data[5].visibility;
+                      var visible6 = v6 + " mi";
+
+                      var p6 = output.hourly.data[5].pressure;
+                      var pressure6 = p6 + " mb";
+
+                      document.getElementById("wind6").innerHTML = wind6;
+                      document.getElementById("humidity6").innerHTML = humidity6;
+                      document.getElementById("visible6").innerHTML = visible6;
+                      document.getElementById("pressure6").innerHTML = pressure6;
+
+                      /* seventh */
+                      var w7 = output.hourly.data[6].windSpeed;
+                      var wind7 = w7 + "  mph" ;
+
+                      var hu7 = Math.round(output.hourly.data[6].humidity);
+                      var humidity7 = hu7 + " %";
+
+                      var v7 = output.hourly.data[6].visibility;
+                      var visible7 = v7 + " mi";
+
+                      var p7 = output.hourly.data[6].pressure;
+                      var pressure7 = p7 + " mb";
+
+                      document.getElementById("wind7").innerHTML = wind7;
+                      document.getElementById("humidity7").innerHTML = humidity7;
+                      document.getElementById("visible7").innerHTML = visible7;
+                      document.getElementById("pressure7").innerHTML = pressure7;
+
+                      /* eighth */
+                      var w8 = output.hourly.data[7].windSpeed;
+                      var wind8 = w8 + "  mph" ;
+
+                      var hu8 = Math.round(output.hourly.data[7].humidity);
+                      var humidity8 = hu8 + " %";
+
+                      var v8 = output.hourly.data[7].visibility;
+                      var visible8 = v8 + " mi";
+
+                      var p8 = output.hourly.data[7].pressure;
+                      var pressure8 = p8 + " mb";
+
+                      document.getElementById("wind8").innerHTML = wind8;
+                      document.getElementById("humidity8").innerHTML = humidity8;
+                      document.getElementById("visible8").innerHTML = visible8;
+                      document.getElementById("pressure8").innerHTML = pressure8;
+
+                      /* ninth */
+                      var w9 = output.hourly.data[8].windSpeed;
+                      var wind9 = w9 + "  mph" ;
+
+                      var hu9 = Math.round(output.hourly.data[8].humidity);
+                      var humidity9 = hu9 + " %";
+
+                      var v9 = output.hourly.data[8].visibility;
+                      var visible9 = v9 + " mi";
+
+                      var p9 = output.hourly.data[8].pressure;
+                      var pressure9 = p9 + " mb";
+
+                      document.getElementById("wind9").innerHTML = wind9;
+                      document.getElementById("humidity9").innerHTML = humidity9;
+                      document.getElementById("visible9").innerHTML = visible9;
+                      document.getElementById("pressure9").innerHTML = pressure9;
+
+                      /* tenth */
+                      var w10 = output.hourly.data[9].windSpeed;
+                      var wind10 = w10 + "  mph" ;
+
+                      var hu10 = Math.round(output.hourly.data[9].humidity);
+                      var humidity10 = hu10 + " %";
+
+                      var v10 = output.hourly.data[9].visibility;
+                      var visible10 = v10 + " mi";
+
+                      var p10 = output.hourly.data[9].pressure;
+                      var pressure10 = p10 + " mb";
+
+                      document.getElementById("wind10").innerHTML = wind10;
+                      document.getElementById("humidity10").innerHTML = humidity10;
+                      document.getElementById("visible10").innerHTML = visible10;
+                      document.getElementById("pressure10").innerHTML = pressure10;
+
+
+                      /* eleventh */
+                      var w11 = output.hourly.data[10].windSpeed;
+                      var wind11 = w11 + "  mph" ;
+
+                      var hu11 = Math.round(output.hourly.data[10].humidity);
+                      var humidity11 = hu11 + " %";
+
+                      var v11 = output.hourly.data[10].visibility;
+                      var visible11 = v11 + " mi";
+
+                      var p11 = output.hourly.data[10].pressure;
+                      var pressure11 = p11 + " mb";
+
+                      document.getElementById("wind11").innerHTML = wind11;
+                      document.getElementById("humidity11").innerHTML = humidity11;
+                      document.getElementById("visible11").innerHTML = visible11;
+                      document.getElementById("pressure11").innerHTML = pressure11;
+
+                      /* twelfth */
+                      var w12 = output.hourly.data[11].windSpeed;
+                      var wind12 = w12 + "  mph" ;
+
+                      var hu12 = Math.round(output.hourly.data[11].humidity);
+                      var humidity12 = hu12 + " %";
+
+                      var v12 = output.hourly.data[11].visibility;
+                      var visible12 = v12 + " mi";
+
+                      var p12 = output.hourly.data[11].pressure;
+                      var pressure12 = p12 + " mb";
+
+                      document.getElementById("wind12").innerHTML = wind12;
+                      document.getElementById("humidity12").innerHTML = humidity12;
+                      document.getElementById("visible12").innerHTML = visible12;
+                      document.getElementById("pressure12").innerHTML = pressure12;
+
+                      /* thirtheen */
+                      var w13 = output.hourly.data[12].windSpeed;
+                      var wind13 = w13 + "  mph" ;
+
+                      var hu13 = Math.round(output.hourly.data[12].humidity);
+                      var humidity13 = hu13 + " %";
+
+                      var v13 = output.hourly.data[12].visibility;
+                      var visible13 = v13 + " mi";
+
+                      var p13 = output.hourly.data[12].pressure;
+                      var pressure13 = p13 + " mb";
+
+                      document.getElementById("wind13").innerHTML = wind13;
+                      document.getElementById("humidity13").innerHTML = humidity13;
+                      document.getElementById("visible13").innerHTML = visible13;
+                      document.getElementById("pressure13").innerHTML = pressure13;
+
+                      /* fourteen */
+                      var w14 = output.hourly.data[13].windSpeed;
+                      var wind14 = w14 + "  mph" ;
+
+                      var hu14 = Math.round(output.hourly.data[13].humidity);
+                      var humidity14 = hu14 + " %";
+
+                      var v14 = output.hourly.data[13].visibility;
+                      var visible14 = v14 + " mi";
+
+                      var p14 = output.hourly.data[13].pressure;
+                      var pressure14 = p14 + " mb";
+
+                      document.getElementById("wind14").innerHTML = wind14;
+                      document.getElementById("humidity14").innerHTML = humidity14;
+                      document.getElementById("visible14").innerHTML = visible14;
+                      document.getElementById("pressure14").innerHTML = pressure14;
+
+                      /* fiftheen */
+                      var w15 = output.hourly.data[14].windSpeed;
+                      var wind15 = w15 + "  mph" ;
+
+                      var hu15 = Math.round(output.hourly.data[14].humidity);
+                      var humidity15 = hu15 + " %";
+
+                      var v15 = output.hourly.data[14].visibility;
+                      var visible15 = v15 + " mi";
+
+                      var p15 = output.hourly.data[14].pressure;
+                      var pressure15 = p15 + " mb";
+
+                      document.getElementById("wind15").innerHTML = wind15;
+                      document.getElementById("humidity15").innerHTML = humidity15;
+                      document.getElementById("visible15").innerHTML = visible15;
+                      document.getElementById("pressure15").innerHTML = pressure15;
+
+                      /* sixteen */
+                      var w16 = output.hourly.data[15].windSpeed;
+                      var wind16 = w16 + "  mph" ;
+
+                      var hu16 = Math.round(output.hourly.data[15].humidity);
+                      var humidity16 = hu16 + " %";
+
+                      var v16 = output.hourly.data[15].visibility;
+                      var visible16 = v16 + " mi";
+
+                      var p16 = output.hourly.data[15].pressure;
+                      var pressure16 = p16 + " mb";
+
+                      document.getElementById("wind16").innerHTML = wind16;
+                      document.getElementById("humidity16").innerHTML = humidity16;
+                      document.getElementById("visible16").innerHTML = visible16;
+                      document.getElementById("pressure16").innerHTML = pressure16;
+
+                      /* seventeen */
+                      var w17 = output.hourly.data[16].windSpeed;
+                      var wind17 = w17 + "  mph" ;
+
+                      var hu17 = Math.round(output.hourly.data[16].humidity);
+                      var humidity17 = hu17 + " %";
+
+                      var v17 = output.hourly.data[16].visibility;
+                      var visible17 = v17 + " mi";
+
+                      var p17 = output.hourly.data[16].pressure;
+                      var pressure17 = p17 + " mb";
+
+                      document.getElementById("wind17").innerHTML = wind17;
+                      document.getElementById("humidity17").innerHTML = humidity17;
+                      document.getElementById("visible17").innerHTML = visible17;
+                      document.getElementById("pressure17").innerHTML = pressure17;
+
+                      /* eighteen */
+                      var w18 = output.hourly.data[17].windSpeed;
+                      var wind18 = w18 + "  mph" ;
+
+                      var hu18 = Math.round(output.hourly.data[17].humidity);
+                      var humidity18 = hu18 + " %";
+
+                      var v18 = output.hourly.data[17].visibility;
+                      var visible18 = v18 + " mi";
+
+                      var p18 = output.hourly.data[17].pressure;
+                      var pressure18 = p18 + " mb";
+
+                      document.getElementById("wind18").innerHTML = wind18;
+                      document.getElementById("humidity18").innerHTML = humidity18;
+                      document.getElementById("visible18").innerHTML = visible18;
+                      document.getElementById("pressure18").innerHTML = pressure18;
+
+                      /* nineteenth */
+                      var w19 = output.hourly.data[18].windSpeed;
+                      var wind19 = w19 + "  mph" ;
+
+                      var hu19 = Math.round(output.hourly.data[18].humidity);
+                      var humidity19 = hu19 + " %";
+
+                      var v19 = output.hourly.data[18].visibility;
+                      var visible19 = v19 + " mi";
+
+                      var p19 = output.hourly.data[18].pressure;
+                      var pressure19 = p19 + " mb";
+
+                      document.getElementById("wind19").innerHTML = wind19;
+                      document.getElementById("humidity19").innerHTML = humidity19;
+                      document.getElementById("visible19").innerHTML = visible19;
+                      document.getElementById("pressure19").innerHTML = pressure19;
+
+                      /* twenty */
+                      var w20 = output.hourly.data[19].windSpeed;
+                      var wind20 = w20 + "  mph" ;
+
+                      var hu20 = Math.round(output.hourly.data[19].humidity);
+                      var humidity20 = hu20 + " %";
+
+                      var v20 = output.hourly.data[19].visibility;
+                      var visible20 = v20 + " mi";
+
+                      var p20 = output.hourly.data[19].pressure;
+                      var pressure20 = p20 + " mb";
+
+                      document.getElementById("wind20").innerHTML = wind20;
+                      document.getElementById("humidity20").innerHTML = humidity20;
+                      document.getElementById("visible20").innerHTML = visible20;
+                      document.getElementById("pressure20").innerHTML = pressure20;
+
+
+                      /* twenty one */
+                      var w21 = output.hourly.data[20].windSpeed;
+                      var wind21 = w21 + "  mph" ;
+
+                      var hu21 = Math.round(output.hourly.data[20].humidity);
+                      var humidity21 = hu21 + " %";
+
+                      var v21 = output.hourly.data[20].visibility;
+                      var visible21 = v21 + " mi";
+
+                      var p21 = output.hourly.data[20].pressure;
+                      var pressure21 = p21 + " mb";
+
+                      document.getElementById("wind21").innerHTML = wind21;
+                      document.getElementById("humidity21").innerHTML = humidity21;
+                      document.getElementById("visible21").innerHTML = visible21;
+                      document.getElementById("pressure21").innerHTML = pressure21;
+
+                      /* twenty two */
+                      var w22 = output.hourly.data[21].windSpeed;
+                      var wind22 = w22 + "  mph" ;
+
+                      var hu22 = Math.round(output.hourly.data[21].humidity);
+                      var humidity22 = hu22 + " %";
+
+                      var v22 = output.hourly.data[21].visibility;
+                      var visible22 = v22 + " mi";
+
+                      var p22 = output.hourly.data[21].pressure;
+                      var pressure22 = p22 + " mb";
+
+                      document.getElementById("wind22").innerHTML = wind22;
+                      document.getElementById("humidity22").innerHTML = humidity22;
+                      document.getElementById("visible22").innerHTML = visible22;
+                      document.getElementById("pressure22").innerHTML = pressure22;
+
+                      /* twenty third */
+                      var w23 = output.hourly.data[22].windSpeed;
+                      var wind23 = w23 + "  mph" ;
+
+                      var hu23 = Math.round(output.hourly.data[22].humidity);
+                      var humidity23 = hu23 + " %";
+
+                      var v23 = output.hourly.data[22].visibility;
+                      var visible23 = v23 + " mi";
+
+                      var p23 = output.hourly.data[22].pressure;
+                      var pressure23 = p23 + " mb";
+
+                      document.getElementById("wind23").innerHTML = wind23;
+                      document.getElementById("humidity23").innerHTML = humidity23;
+                      document.getElementById("visible23").innerHTML = visible23;
+                      document.getElementById("pressure23").innerHTML = pressure23;
+
+                      /* twenty four */
+                      var w24 = output.hourly.data[23].windSpeed;
+                      var wind24 = w24 + "  mph" ;
+
+                      var hu24 = Math.round(output.hourly.data[23].humidity);
+                      var humidity24 = hu24 + " %";
+
+                      var v24 = output.hourly.data[23].visibility;
+                      var visible24 = v24 + " mi";
+
+                      var p24 = output.hourly.data[23].pressure;
+                      var pressure24 = p24 + " mb";
+
+
+
+                      document.getElementById("wind24").innerHTML = wind24;
+                      document.getElementById("humidity24").innerHTML = humidity24;
+                      document.getElementById("visible24").innerHTML = visible24;
+                      document.getElementById("pressure24").innerHTML = pressure24;
+
+
+                      /* Tab 3 */
+
+                      //day[i] = moment((output.daily.data[i].time)*1000).tz(timezone).format('dddd');
+                      //month[i] = moment((output.daily.data[i].time)*1000).tz(timezone).format('MMM DD');
+
+
+
+                      /* Day 1 */ 
+
+                      var divas1 = moment((output.daily.data[1].time)*1000).tz(timezone).format('dddd');
+                      var mahina1 = moment((output.daily.data[1].time)*1000).tz(timezone).format('MMM DD');
+
+                      var x1 = output.daily.data[1].icon;
+                      
+                      var mintemp1 = output.daily.data[1].temperatureMin;
+                      var maxtemp1 = output.daily.data[1].temperatureMax + " °";
+                      var ic1 = " ";
+
+                      if(x1=="clear-day"){ic1 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/clear.png' width='40' height='30'/>";}
+                      if(x1=="clear-night"){ic1 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/clear_night.png' width='40' height='30' />";}
+                      if(x1=="rain"){ic1 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/rain.png' width='40' height='30' />";}
+                      if(x1=="snow"){ic1 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/snow.png' width='40' height='30' />";}
+                      if(x1=="sleet"){ic1 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/sleet.png' width='40' height='30' />";}
+                      if(x1=="wind"){ic1 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/wind.png' width='40' height='30' />";}
+                      if(x1=="fog"){ic1 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/fog.png' width='40' height='30' />";}
+                      if(x1=="cloudy"){ic1 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/cloudy.png' width='40' height='30' />";}
+                      if(x1=="partly-cloudy-day"){ic1 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/cloud_day.png' width='40' height='30' />";}
+                      if(x1=="partly-cloudy-night"){ic1 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/cloud_night.png' width='40' height='30' />";}
+
+                      document.getElementById("mahina1").innerHTML = mahina1;
+                      document.getElementById("divas1").innerHTML = divas1;
+                      document.getElementById("ic1").innerHTML = ic1;
+                      document.getElementById("mintemp1").innerHTML = mintemp1 + " °";
+                      document.getElementById("maxtemp1").innerHTML = maxtemp1;
+
+                      /* Day 2 */
+                      var divas2 = moment((output.daily.data[2].time)*1000).tz(timezone).format('dddd');
+                      var mahina2 = moment((output.daily.data[2].time)*1000).tz(timezone).format('MMM DD');
+
+                      var x2 = output.daily.data[2].icon;
+                      
+                      var mintemp2 = output.daily.data[2].temperatureMin + " °";
+                      var maxtemp2 = output.daily.data[2].temperatureMax + " °";
+                      var ic2 = " ";
+
+                      if(x2=="clear-day"){ic2 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/clear.png' width='40' height='30'/>";}
+                      if(x2=="clear-night"){ic2 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/clear_night.png' width='40' height='30' />";}
+                      if(x2=="rain"){ic2 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/rain.png' width='40' height='30' />";}
+                      if(x2=="snow"){ic2 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/snow.png' width='40' height='30' />";}
+                      if(x2=="sleet"){ic2 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/sleet.png' width='40' height='30' />";}
+                      if(x2=="wind"){ic2 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/wind.png' width='40' height='30' />";}
+                      if(x2=="fog"){ic2 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/fog.png' width='40' height='30' />";}
+                      if(x2=="cloudy"){ic2 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/cloudy.png' width='40' height='30' />";}
+                      if(x2=="partly-cloudy-day"){ic2 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/cloud_day.png' width='40' height='30' />";}
+                      if(x2=="partly-cloudy-night"){ic2 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/cloud_night.png' width='40' height='30' />";}
+
+                      document.getElementById("mahina2").innerHTML = mahina2;
+                      document.getElementById("divas2").innerHTML = divas2;
+                      document.getElementById("ic2").innerHTML = ic2;
+                      document.getElementById("mintemp2").innerHTML = mintemp2;
+                      document.getElementById("maxtemp2").innerHTML = maxtemp2;
+
+                      /* Day 3 */
+                      var divas3 = moment((output.daily.data[3].time)*1000).tz(timezone).format('dddd');
+                      var mahina3 = moment((output.daily.data[3].time)*1000).tz(timezone).format('MMM DD');
+
+                      var x3 = output.daily.data[3].icon;
+                      var ic3 = " ";
+                      
+                      var mintemp3 = output.daily.data[3].temperatureMin + " °";
+                      var maxtemp3 = output.daily.data[3].temperatureMax + " °";
+                      
+                      if(x3=="clear-day"){ic3 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/clear.png' width='40' height='30'/>";}
+                      if(x3=="clear-night"){ic3 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/clear_night.png' width='40' height='30' />";}
+                      if(x3=="rain"){ic3 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/rain.png' width='40' height='30' />";}
+                      if(x3=="snow"){ic3 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/snow.png' width='40' height='30' />";}
+                      if(x3=="sleet"){ic3 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/sleet.png' width='40' height='30' />";}
+                      if(x3=="wind"){ic3 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/wind.png' width='40' height='30' />";}
+                      if(x3=="fog"){ic3 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/fog.png' width='40' height='30' />";}
+                      if(x3=="cloudy"){ic3 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/cloudy.png' width='40' height='30' />";}
+                      if(x3=="partly-cloudy-day"){ic3 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/cloud_day.png' width='40' height='30' />";}
+                      if(x3=="partly-cloudy-night"){ic3 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/cloud_night.png' width='40' height='30' />";}
+
+                      document.getElementById("mahina3").innerHTML = mahina3;
+                      document.getElementById("divas3").innerHTML = divas3;
+                      document.getElementById("mintemp3").innerHTML = mintemp3;
+                      document.getElementById("maxtemp3").innerHTML = maxtemp3;
+                      document.getElementById("ic3").innerHTML = ic3;
+
+
+                      /* Day 4 */
+                      var divas4 = moment((output.daily.data[4].time)*1000).tz(timezone).format('dddd');
+                      var mahina4 = moment((output.daily.data[4].time)*1000).tz(timezone).format('MMM DD');
+
+                      var x4 = output.daily.data[4].icon;
+                      var ic4 = " ";
+                      
+                      var mintemp4 = output.daily.data[4].temperatureMin + " °";
+                      var maxtemp4 = output.daily.data[4].temperatureMax + " °";
+                      
+                      if(x4=="clear-day"){ic4 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/clear.png' width='40' height='30'/>";}
+                      if(x4=="clear-night"){ic4 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/clear_night.png' width='40' height='30' />";}
+                      if(x4=="rain"){ic4 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/rain.png' width='40' height='30' />";}
+                      if(x4=="snow"){ic4 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/snow.png' width='40' height='30' />";}
+                      if(x4=="sleet"){ic4 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/sleet.png' width='40' height='30' />";}
+                      if(x4=="wind"){ic4 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/wind.png' width='40' height='30' />";}
+                      if(x4=="fog"){ic4 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/fog.png' width='40' height='30' />";}
+                      if(x4=="cloudy"){ic4 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/cloudy.png' width='40' height='30' />";}
+                      if(x4=="partly-cloudy-day"){ic4 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/cloud_day.png' width='40' height='30' />";}
+                      if(x4=="partly-cloudy-night"){ic4 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/cloud_night.png' width='40' height='30' />";}
+
+                      document.getElementById("mahina4").innerHTML = mahina4;
+                      document.getElementById("divas4").innerHTML = divas4;
+                      document.getElementById("ic4").innerHTML = ic4;
+                      document.getElementById("mintemp4").innerHTML = mintemp4;
+                      document.getElementById("maxtemp4").innerHTML = maxtemp4;
+
+
+                      /* Day 5 */
+                      var divas5 = moment((output.daily.data[5].time)*1000).tz(timezone).format('dddd');
+                      var mahina5 = moment((output.daily.data[5].time)*1000).tz(timezone).format('MMM DD');
+
+                      var x5 = output.daily.data[5].icon;
+                      var ic5 = " ";
+                      
+                      var mintemp5 = output.daily.data[5].temperatureMin + " °";
+                      var maxtemp5 = output.daily.data[5].temperatureMax + " °";
+                      
+                      if(x5=="clear-day"){ic5 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/clear.png' width='40' height='30'/>";}
+                      if(x5=="clear-night"){ic5 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/clear_night.png' width='40' height='30' />";}
+                      if(x5=="rain"){ic5 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/rain.png' width='40' height='30' />";}
+                      if(x5=="snow"){ic5 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/snow.png' width='40' height='30' />";}
+                      if(x5=="sleet"){ic5 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/sleet.png' width='40' height='30' />";}
+                      if(x5=="wind"){ic5 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/wind.png' width='40' height='30' />";}
+                      if(x5=="fog"){ic5 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/fog.png' width='40' height='30' />";}
+                      if(x5=="cloudy"){ic5 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/cloudy.png' width='40' height='30' />";}
+                      if(x5=="partly-cloudy-day"){ic5 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/cloud_day.png' width='40' height='30' />";}
+                      if(x5=="partly-cloudy-night"){ic5 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/cloud_night.png' width='40' height='30' />";}
+
+                      document.getElementById("mahina5").innerHTML = mahina5;
+                      document.getElementById("divas5").innerHTML = divas5;
+                      document.getElementById("mintemp5").innerHTML = mintemp5;
+                      document.getElementById("maxtemp5").innerHTML = maxtemp5;
+                      document.getElementById("ic5").innerHTML = ic5;
+
+
+                      /* Day 6 */
+                      var divas6 = moment((output.daily.data[6].time)*1000).tz(timezone).format('dddd');
+                      var mahina6 = moment((output.daily.data[6].time)*1000).tz(timezone).format('MMM DD');
+
+                      var x6 = output.daily.data[6].icon;
+                      var ic6 = " ";
+                      var mintemp6 = output.daily.data[6].temperatureMin + " °";
+                      var maxtemp6 = output.daily.data[6].temperatureMax + " °";
+                      
+                      if(x6=="clear-day"){ic6 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/clear.png' width='40' height='30'/>";}
+                      if(x6=="clear-night"){ic6 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/clear_night.png' width='40' height='30' />";}
+                      if(x6=="rain"){ic6 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/rain.png' width='40' height='30' />";}
+                      if(x6=="snow"){ic6 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/snow.png' width='40' height='30' />";}
+                      if(x6=="sleet"){ic6 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/sleet.png' width='40' height='30' />";}
+                      if(x6=="wind"){ic6 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/wind.png' width='40' height='30' />";}
+                      if(x6=="fog"){ic6 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/fog.png' width='40' height='30' />";}
+                      if(x6=="cloudy"){ic6 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/cloudy.png' width='40' height='30' />";}
+                      if(x6=="partly-cloudy-day"){ic6 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/cloud_day.png' width='40' height='30' />";}
+                      if(x6=="partly-cloudy-night"){ic6 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/cloud_night.png' width='40' height='30' />";}
+
+                      document.getElementById("mahina6").innerHTML = mahina6;
+                      document.getElementById("divas6").innerHTML = divas6;
+                      document.getElementById("mintemp6").innerHTML = mintemp6;
+                      document.getElementById("maxtemp6").innerHTML = maxtemp6;
+                      
+                      document.getElementById("ic6").innerHTML = ic6;
+
+
+                      /* Day 7 */
+                      var divas7 = moment((output.daily.data[7].time)*1000).tz(timezone).format('dddd');
+                      var mahina7 = moment((output.daily.data[7].time)*1000).tz(timezone).format('MMM DD');
+
+                      var x7 = output.daily.data[7].icon;
+                      var ic7 = " ";
+                      var mintemp7 = output.daily.data[7].temperatureMin + " °";
+                      var maxtemp7 = output.daily.data[7].temperatureMax + " °"; 
+                      
+                      if(x7=="clear-day"){ic7 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/clear.png' width='40' height='30'/>";}
+                      if(x7=="clear-night"){ic7 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/clear_night.png' width='40' height='30' />";}
+                      if(x7=="rain"){ic7 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/rain.png' width='40' height='30' />";}
+                      if(x7=="snow"){ic7 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/snow.png' width='40' height='30' />";}
+                      if(x7=="sleet"){ic7 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/sleet.png' width='40' height='30' />";}
+                      if(x7=="wind"){ic7 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/wind.png' width='40' height='30' />";}
+                      if(x7=="fog"){ic7 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/fog.png' width='40' height='30' />";}
+                      if(x7=="cloudy"){ic7 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/cloudy.png' width='40' height='30' />";}
+                      if(x7=="partly-cloudy-day"){ic7 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/cloud_day.png' width='40' height='30' />";}
+                      if(x7=="partly-cloudy-night"){ic7 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/cloud_night.png' width='40' height='30' />";}
+
+                      document.getElementById("mahina7").innerHTML = mahina7;
+                      document.getElementById("divas7").innerHTML = divas7; 
+                      document.getElementById("mintemp7").innerHTML = mintemp7;
+                      document.getElementById("maxtemp7").innerHTML = maxtemp7;
+                      
+
+                      document.getElementById("ic7").innerHTML = ic7;
+
+
+                      /* Modal Display*/
+                      
+                      var chu1 = "Weather in " + cit + " on " + mahina1;
+                      //alert(chu1);
+
+                      var sunno1 = moment((output.daily.data[1].sunriseTime)*1000).tz(timezone).format('hh:mm A');
+                      
+                      var sunao1 = moment((output.daily.data[1].sunriseTime)*1000).tz(timezone).format('hh:mm A');
+
+
+                      var img1 = output.daily.data[1].icon;
+                      var image1 = " ";
+
+                      if(img1=="clear-day"){image1 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/clear.png' width='100' height='100'/>";}
+                      if(img1=="clear-night"){image1 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/clear_night.png' width='100' height='100' />";}
+                      if(img1=="rain"){image1 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/rain.png' width='100' height='100' />";}
+                      if(img1=="snow"){image1 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/snow.png' width='100' height='100' />";}
+                      if(img1=="sleet"){image1 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/sleet.png' width='100' height='100' />";}
+                      if(img1=="wind"){image1 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/wind.png' width='100' height='100' />";}
+                      if(img1=="fog"){image1 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/fog.png' width='100' height='100' />";}
+                      if(img1=="cloudy"){image1 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/cloudy.png' width='100' height='100' />";}
+                      if(img1=="partly-cloudy-day"){image1 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/cloud_day.png' width='100' height='100' />";}
+                      if(img1=="partly-cloudy-night"){image1 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/cloud_night.png' width='100' height='100' />";}
+                      //alert(image1);
+
+                      var daysum1 = divas1 + " : " + "<span class = 'chodu' >" + output.daily.data[1].summary + "</span>";
+
+
+                      var hu1 = output.daily.data[1].humidity;
+                      var hum1 = hu1 + " % ";
+
+                      var win1 = output.daily.data[1].windSpeed;
+                      //alert(win1);
+                      var windu1 = win1 + " mph ";
+
+                      var vis1 = output.daily.data[1].visibility;
+                      //alert(vis1);
+                      var vi1 = "";
+                      if (vis1 == undefined){
+                        vi1 = "N/A"; 
+                      }else{
+                        vi1 = vis1 + " mi";
+                      }
+                      
+
+                      var pre1 = output.daily.data[1].pressure;
+                      var pres1 = pre1 + " mb";
+
+                      document.getElementById("chu1").innerHTML = chu1; 
+                      document.getElementById("sunno1").innerHTML = sunno1;
+                      document.getElementById("sunao1").innerHTML = sunao1;
+                      document.getElementById("image1").innerHTML = image1;
+                      document.getElementById("daysum1").innerHTML = daysum1;                      
+                      document.getElementById("hum1").innerHTML = hum1;
+                      document.getElementById("windu1").innerHTML = windu1;
+                      document.getElementById("vi1").innerHTML = vi1;
+                      document.getElementById("pres1").innerHTML = pres1;
+
+
+                      /* Day 2*/
+                      var chu2 = "Weather in " + cit + " on " + mahina2;
+                      var sunno2 = moment((output.daily.data[2].sunriseTime)*1000).tz(timezone).format('hh:mm A');
+                      
+                      var sunao2 = moment((output.daily.data[2].sunriseTime)*1000).tz(timezone).format('hh:mm A');
+
+                      var img2 = output.daily.data[2].icon;
+                      var image2 = " ";
+
+                      if(img2=="clear-day"){image2 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/clear.png' width='100' height='100'/>";}
+                      if(img2=="clear-night"){image2 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/clear_night.png' width='100' height='100' />";}
+                      if(img2=="rain"){image2 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/rain.png' width='100' height='100' />";}
+                      if(img2=="snow"){image2 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/snow.png' width='100' height='100' />";}
+                      if(img2=="sleet"){image2 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/sleet.png' width='100' height='100' />";}
+                      if(img2=="wind"){image2 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/wind.png' width='100' height='100' />";}
+                      if(img2=="fog"){image2 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/fog.png' width='100' height='100' />";}
+                      if(img2=="cloudy"){image2 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/cloudy.png' width='100' height='100' />";}
+                      if(img2=="partly-cloudy-day"){image2 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/cloud_day.png' width='100' height='100' />";}
+                      if(img2=="partly-cloudy-night"){image2 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/cloud_night.png' width='100' height='100' />";}
+                      //alert(image2);
+                      
+                      var daysum2 = divas2 + " : " + "<span class = 'chodu' >" + output.daily.data[2].summary + "</span>";;
+
+
+                      var hu2 = output.daily.data[2].humidity;
+                      var hum2 = hu2 + " % ";
+
+                      var win2 = output.daily.data[2].windSpeed;
+                      //alert(win2);
+                      var windu2 = win2 + " mph ";
+
+                      var vis2 = output.daily.data[2].visibility;
+                      var vi2 = "";
+                      if (vis2 == undefined){
+                        vi2 = "N/A"; 
+                      }else{
+                        vi2 = vis2 + " mi";
+                      }
+                      
+
+                      var pre2 = output.daily.data[2].pressure;
+                      var pres2 = pre2 + " mb";
+
+                      document.getElementById("chu2").innerHTML = chu2;
+                      document.getElementById("sunno2").innerHTML = sunno2;
+                      document.getElementById("sunao2").innerHTML = sunao2; 
+                      document.getElementById("image2").innerHTML = image2;
+                      document.getElementById("daysum2").innerHTML = daysum2;                      
+                      document.getElementById("hum2").innerHTML = hum2;
+                      document.getElementById("windu2").innerHTML = windu2;
+                      document.getElementById("vi2").innerHTML = vi2;
+                      document.getElementById("pres2").innerHTML = pres2;
+
+
+                      /* Day 3 */
+                      var chu3 = "Weather in " + cit + " on " + mahina3;
+
+                      var sunno3 = moment((output.daily.data[3].sunriseTime)*1000).tz(timezone).format('hh:mm A');
+                      
+                      var sunao3 = moment((output.daily.data[3].sunriseTime)*1000).tz(timezone).format('hh:mm A');
+
+ 
+                      var img3 = output.daily.data[3].icon;
+                      var image3 = " ";
+
+                      if(img3=="clear-day"){image3 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/clear.png' width='100' height='100'/>";}
+                      if(img3=="clear-night"){image3 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/clear_night.png' width='100' height='100' />";}
+                      if(img3=="rain"){image3 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/rain.png' width='100' height='100' />";}
+                      if(img3=="snow"){image3 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/snow.png' width='100' height='100' />";}
+                      if(img3=="sleet"){image3 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/sleet.png' width='100' height='100' />";}
+                      if(img3=="wind"){image3 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/wind.png' width='100' height='100' />";}
+                      if(img3=="fog"){image3 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/fog.png' width='100' height='100'/>";}
+                      if(img3=="cloudy"){image3 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/cloudy.png' width='100' height='100' />";}
+                      if(img3=="partly-cloudy-day"){image3 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/cloud_day.png' width='100' height='100' />";}
+                      if(img3=="partly-cloudy-night"){image3 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/cloud_night.png' width='100' height='100' />";}
+                      //alert(image3);
+
+                      var daysum3 = divas3 + " : " + "<span class = 'chodu' >" + output.daily.data[3].summary + "</span>";
+
+
+                      var hu3 = output.daily.data[3].humidity;
+                      var hum3 = hu3 + " % ";
+
+                      var win3 = output.daily.data[3].windSpeed;
+                      //alert(win3);
+                      var windu3 = win3 + " mph ";
+
+                      var vis3 = output.daily.data[3].visibility;
+                      var vi3 = "";
+                      if (vis3 == undefined){
+                        vi3 = "N/A"; 
+                      }else{
+                        vi3 = vis3 + " mi";
+                      }
+                      
+
+                      var pre3 = output.daily.data[3].pressure;
+                      var pres3 = pre3 + " mb";
+
+
+                      document.getElementById("chu3").innerHTML = chu3;
+                      document.getElementById("sunno3").innerHTML = sunno3;
+                      document.getElementById("sunao3").innerHTML = sunao3;
+                      document.getElementById("image3").innerHTML = image3;
+                      document.getElementById("daysum3").innerHTML = daysum3;                      
+                      document.getElementById("hum3").innerHTML = hum3;
+                      document.getElementById("windu3").innerHTML = windu3;
+                      document.getElementById("vi3").innerHTML = vi3;
+                      document.getElementById("pres3").innerHTML = pres3;
+
+                       /* Day 4 */
+
+                       var chu4 = "Weather in " + cit + " on " + mahina4;
+                       var sunno4 = moment((output.daily.data[4].sunriseTime)*1000).tz(timezone).format('hh:mm A');
+                      
+                      var sunao4 = moment((output.daily.data[4].sunriseTime)*1000).tz(timezone).format('hh:mm A');
+
+                      var img4 = output.daily.data[4].icon;
+                      var image4 = " ";
+
+                      if(img4=="clear-day"){image4 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/clear.png' width='100' height='100'/>";}
+                      if(img4=="clear-night"){image4 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/clear_night.png' width='100' height='100' />";}
+                      if(img4=="rain"){image4 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/rain.png' width='100' height='100' />";}
+                      if(img4=="snow"){image4 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/snow.png' width='100' height='100' />";}
+                      if(img4=="sleet"){image4 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/sleet.png' width='100' height='100' />";}
+                      if(img4=="wind"){image4 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/wind.png' width='100' height='100' />";}
+                      if(img4=="fog"){image4 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/fog.png' width='100' height='100' />";}
+                      if(img4=="cloudy"){image4 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/cloudy.png' width='100' height='100' />";}
+                      if(img4=="partly-cloudy-day"){image4 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/cloud_day.png' width='100' height='100' />";}
+                      if(img4=="partly-cloudy-night"){image4 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/cloud_night.png' width='100' height='100' />";}
+                      //alert(image4);
+                      var daysum4 = divas4 + " : " + "<span class = 'chodu' >" + output.daily.data[4].summary + "</span>";
+
+
+                      var hu4 = output.daily.data[4].humidity;
+                      var hum4 = hu4 + " % ";
+
+                      var win4 = output.daily.data[4].windSpeed;
+                      //alert(win4);
+                      var windu4 = win4 + " mph ";
+
+                      var vis4 = output.daily.data[4].visibility;
+                      var vi4 = "";
+                      if (vis4 == undefined){
+                        vi4 = "N/A"; 
+                      }else{
+                        vi4 = vis4 + " mi";
+                      }
+                      
+
+                      var pre4 = output.daily.data[4].pressure;
+                      var pres4 = pre4 + " mb";
+
+                      document.getElementById("chu4").innerHTML = chu4;
+                      document.getElementById("sunno4").innerHTML = sunno4;
+                      document.getElementById("sunao4").innerHTML = sunao4;
+                      document.getElementById("image4").innerHTML = image4;
+                      document.getElementById("daysum4").innerHTML = daysum4;                      
+                      document.getElementById("hum4").innerHTML = hum4;
+                      document.getElementById("windu4").innerHTML = windu4;
+                      document.getElementById("vi4").innerHTML = vi4;
+                      document.getElementById("pres4").innerHTML = pres4;
+
+
+                      /* Day 5 */
+                      var chu5 = "Weather in " + cit + " on " + mahina5;
+
+                      var sunno5 = moment((output.daily.data[5].sunriseTime)*1000).tz(timezone).format('hh:mm A');
+                      
+                      var sunao5 = moment((output.daily.data[5].sunriseTime)*1000).tz(timezone).format('hh:mm A');
+
+
+                      var img5 = output.daily.data[5].icon;
+                      var image5 = " ";
+
+                      if(img5=="clear-day"){image5 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/clear.png' width='100' height='100'/>";}
+                      if(img5=="clear-night"){image5 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/clear_night.png' width='100' height='100' />";}
+                      if(img5=="rain"){image5 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/rain.png' width='100' height='100' />";}
+                      if(img5=="snow"){image5 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/snow.png' width='100' height='100' />";}
+                      if(img5=="sleet"){image5 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/sleet.png' width='100' height='100' />";}
+                      if(img5=="wind"){image5 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/wind.png' width='100' height='100' />";}
+                      if(img5=="fog"){image5 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/fog.png' width='100' height='100' />";}
+                      if(img5=="cloudy"){image5 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/cloudy.png' width='100' height='100' />";}
+                      if(img5=="partly-cloudy-day"){image5 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/cloud_day.png' width='100' height='100' />";}
+                      if(img5=="partly-cloudy-night"){image5 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/cloud_night.png' width='100' height='100' />";}
+                      //alert(image5);
+
+                      var daysum5 = divas5 + " : " + "<span class = 'chodu' >" + output.daily.data[5].summary + "</span>";
+
+
+                      var hu5 = output.daily.data[5].humidity;
+                      var hum5 = hu5 + " % ";
+
+                      var win5 = output.daily.data[5].windSpeed;
+                      //alert(win5);
+                      var windu5 = win5 + " mph ";
+
+                      var vis5 = output.daily.data[5].visibility;
+                      var vi5 = "";
+                      if (vis5 == undefined){
+                        vi5 = "N/A"; 
+                      }else{
+                        vi5 = vis5 + " mi";
+                      }
+                      
+
+                      var pre5 = output.daily.data[5].pressure;
+                      var pres5 = pre5 + " mb";
+
+                      document.getElementById("chu5").innerHTML = chu5;
+                      document.getElementById("sunno5").innerHTML = sunno5;
+                      document.getElementById("sunao5").innerHTML = sunao5;
+                      document.getElementById("image5").innerHTML = image5;
+                      document.getElementById("daysum5").innerHTML = daysum5;                      
+                      document.getElementById("hum5").innerHTML = hum5;
+                      document.getElementById("windu5").innerHTML = windu5;
+                      document.getElementById("vi5").innerHTML = vi5;
+                      document.getElementById("pres5").innerHTML = pres5;
+
+
+                      /* Day 6 */
+                      var chu6 = "Weather in " + cit + " on " + mahina6;
+
+                      var sunno6 = moment((output.daily.data[6].sunriseTime)*1000).tz(timezone).format('hh:mm A');
+                      
+                      var sunao6 = moment((output.daily.data[6].sunriseTime)*1000).tz(timezone).format('hh:mm A');
+
+
+                      var img6 = output.daily.data[6].icon;
+                      var image6 = " ";
+
+                      if(img6=="clear-day"){image6 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/clear.png' width='100' height='100'/>";}
+                      if(img6=="clear-night"){image6 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/clear_night.png' width='100' height='100' />";}
+                      if(img6=="rain"){image6 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/rain.png' width='100' height='100' />";}
+                      if(img6=="snow"){image6 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/snow.png' width='100' height='100' />";}
+                      if(img6=="sleet"){image6 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/sleet.png' width='100' height='100' />";}
+                      if(img6=="wind"){image6 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/wind.png' width='100' height='100' />";}
+                      if(img6=="fog"){image6 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/fog.png' width='100' height='100' />";}
+                      if(img6=="cloudy"){image6 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/cloudy.png' width='100' height='100' />";}
+                      if(img6=="partly-cloudy-day"){image6 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/cloud_day.png' width='100' height='100' />";}
+                      if(img6=="partly-cloudy-night"){image6 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/cloud_night.png' width='100' height='100' />";}
+                      //alert(image6);
+                      var daysum6 = divas6 + " : " + "<span class = 'chodu' >" + output.daily.data[6].summary + "</span>";
+
+
+                      var hu6 = output.daily.data[6].humidity;
+                      var hum6 = hu6 + " % ";
+
+                      var win6 = output.daily.data[6].windSpeed;
+                      //alert(win6);
+                      var windu6 = win6 + " mph ";
+
+                      var vis6 = output.daily.data[6].visibility;
+                      var vi6 = "";
+                      if (vis6 == undefined){
+                        vi6 = "N/A"; 
+                      }else{
+                        vi6 = vis6 + " mi";
+                      }
+                      
+
+                      var pre6 = output.daily.data[6].pressure;
+                      var pres6 = pre6 + " mb";
+
+                      document.getElementById("chu6").innerHTML = chu6;
+                      document.getElementById("sunno6").innerHTML = sunno6;
+                      document.getElementById("sunao6").innerHTML = sunao6;
+                      document.getElementById("image6").innerHTML = image6;
+                      document.getElementById("daysum6").innerHTML = daysum6;                      
+                      document.getElementById("hum6").innerHTML = hum6;
+                      document.getElementById("windu6").innerHTML = windu6;
+                      document.getElementById("vi6").innerHTML = vi6;
+                      document.getElementById("pres6").innerHTML = pres6;
+
+      
+                      /* Day 7 */
+                      var chu7 = "Weather in " + cit + " on " + mahina7;
+                      var sunno7 = moment((output.daily.data[7].sunriseTime)*1000).tz(timezone).format('hh:mm A');
+                      
+                      var sunao7 = moment((output.daily.data[7].sunriseTime)*1000).tz(timezone).format('hh:mm A');
+
+
+                      var img7 = output.daily.data[7].icon;
+                      var image7 = " ";
+
+                      if(img7=="clear-day"){image7 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/clear.png' width='100' height='100'/>";}
+                      if(img7=="clear-night"){image7 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/clear_night.png' width='100' height='100' />";}
+                      if(img7=="rain"){image7 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/rain.png' width='100' height='100' />";}
+                      if(img7=="snow"){image7 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/snow.png' width='100' height='100' />";}
+                      if(img7=="sleet"){image7 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/sleet.png' width='100' height='100' />";}
+                      if(img7=="wind"){image7 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/wind.png' width='100' height='100' />";}
+                      if(img7=="fog"){image7 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/fog.png' width='100' height='100' />";}
+                      if(img7=="cloudy"){image7 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/cloudy.png' width='100' height='100' />";}
+                      if(img7=="partly-cloudy-day"){image7 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/cloud_day.png' width='100' height='100' />";}
+                      if(img7=="partly-cloudy-night"){image7 = "<img src ='http://cs-server.usc.edu:45678/hw/hw8/images/cloud_night.png' width='100' height='100' />";}
+                      //alert(image7);
+                      var daysum7 = divas7 + " : " + "<span class = 'chodu' >" + output.daily.data[7].summary + "</span>";
+
+
+                      var hu7 = output.daily.data[7].humidity;
+                      var hum7 = hu7 + " % ";
+
+                      var win7 = output.daily.data[7].windSpeed;
+                      //alert(win7);
+                      var windu7 = win7 + " mph ";
+
+                      var vis7 = output.daily.data[7].visibility;
+                      var vi7 = "";
+                      if (vis7 == undefined){
+                        vi7 = "N/A"; 
+                      }else{
+                        vis7 = vis7 + " mi";
+                      }
+                      
+
+                      var pre7 = output.daily.data[7].pressure;
+                      var pres7 = pre7 + " mb";
+
+                      document.getElementById("chu7").innerHTML = chu7;
+                      document.getElementById("sunno7").innerHTML = sunno7;
+                      document.getElementById("sunao7").innerHTML = sunao7;
+                      document.getElementById("image7").innerHTML = image7;
+                      document.getElementById("daysum7").innerHTML = daysum7;                      
+                      document.getElementById("hum7").innerHTML = hum7;
+                      document.getElementById("windu7").innerHTML = windu7;
+                      document.getElementById("vi7").innerHTML = vi7;
+                      document.getElementById("pres7").innerHTML = pres7;
+ 
+                                          
+                },
+                error:function(err){
+                     alert("error");
+              }
+
+          });
+
+
+
+
+
+	}
+  
+
+	</script>
+
+<body>
+
+
+
+  <h1 align="center"> Forecast Search </h1>
+	
+	
+	<div class="container" style="background-color:rgba(0,0,0,0.2); width: 80%; margin-top:10px;">
+
+	<form name = "forecast" method="get" action="" id ="forecast" class="form-inline" role="form">	
+      <div class="form-group">
+       <label><span class="jhamru">Street Address : </span><span class="inside"> * </span></label> <br>
+       	<input type="text" class="form-control" id = "address" name="address" placeholder ="Enter the Street Address" >
+        <span id = "1"></span>
+       </div>
+       <div class="form-group">
+       <label><span class ="jhamru"> City : </span> <span class="inside"> * </span></label><br>
+       <input type="text" class="form-control" id = "city" name="city" placeholder ="Enter the City name" >
+       <span id = "2"></span>
+       </div>
+       <div class="form-group">
+      <label> <span class ="jhamru"> State : </span> <span class="inside"> * </span></label> <br>
+      <select name="state" class="form-control" id="s">
+          <option value="">Select your state</option>
+          <option value="AL">Alabama</option>
+          <option value="AK">Alaska</option>
+          <option value="AZ">Arizona</option>
+          <option value="AR">Arkansas</option>
+          <option value="CA">California</option>
+          <option value="CO">Colorado</option>
+          <option value="CT">Connecticut</option>
+          <option value="DE">Delaware</option>
+          <option value="DC">District of Columbia</option>
+          <option value="FL">Florida</option>
+          <option value="GA">Georgia</option>
+          <option value="HI">Hawaii</option>
+          <option value="ID">Idaho</option>
+          <option value="IL">Illinois</option>
+          <option value="IN">Indiana</option>
+          <option value="IA">Iowa</option>
+          <option value="KS">Kansas</option>
+          <option value="KY">Kentucky</option>
+          <option value="LA">Louisiana</option>
+          <option value="ME">Maine</option>
+          <option value="MD">Maryland</option>
+          <option value="MA">Massachusetts</option>
+          <option value="MI">Michigan</option>
+          <option value="MN">Minnesota</option>
+          <option value="MS">Mississippi</option>
+          <option value="MO">Missouri</option>
+          <option value="MT">Montana</option>
+          <option value="NE">Nebraska</option>
+          <option value="NV">Nevada</option>
+          <option value="NH">New Hampshire</option>
+          <option value="NJ">New Jersey</option>
+          <option value="NM">New Mexico</option>
+          <option value="NY">New York</option>
+          <option value="NC">North Carolina</option>
+          <option value="ND">North Dakota</option>
+          <option value="OH">Ohio</option>
+          <option value="OK">Oklahoma</option>
+          <option value="OR">Oregon</option>
+          <option value="PA">Pennsylvania</option>
+          <option value="RI">Rhode Island</option>
+          <option value="SC">South Carolina</option>
+          <option value="SD">South Dakota</option>
+          <option value="TN">Tennessee</option>
+          <option value="TX">Texas</option>
+          <option value="UT">Utah</option>
+          <option value="VT">Vermont</option>
+          <option value="VA">Virginia</option>
+          <option value="WA">Washington</option>
+          <option value="WV">West Virginia</option>
+          <option value="WI">Wisconsin</option>
+          <option value="WY">Wyoming</option>
+        </select>
+        <span id = "3"></span>
+      </div>
+      <div class="form-group">
+       <label><span class ="jhamru"> Degree : </span> <span class="inside"> * </span></label> <br>
+       
+       <label class="radio-inline"> <input type="radio"  name="temperature" value="us" id="us" checked="checked"> <span class ="jhamru"> Fahrenhiet </span> </label>
+       
+        <label class = "radio-inline"> <input type="radio" name="temperature" value="si" id="si"><span class ="jhamru"> Degree </span></label>
+        
+      </div>
+      	<div class = "form-group">
+          <br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          <button type="submit" id = "search" class="btn btn-primary btn-sm" >
+          <span class="glyphicon glyphicon-search"></span> Search </button> 
+          <button type="button" id = "clear" class="btn btn-default btn-sm" onclick="myfunction()">
+          <span class="glyphicon glyphicon-refresh"></span> Clear</button>
+        </div>
+
+        <div class="pull-right">
+         
+          <a href="http://forecast.io"> <span class ="jhamru"> Powered by: </span> <img src="http://cs-server.usc.edu:45678/hw/hw8/images/forecast_logo.png" width="100px" height="40px";> </a>
+        
+        </div>
+          
+
+  </form>    
+      </div>
+	
+	
+
+	<hr></hr>
+  <div class="container" id="chaklya">
+  
+  <ul class="nav nav-pills">
+    <li class="active"><a data-toggle="pill" href="#home" > <span class ="mamu"> Right Now </span></a></li>
+    <li><a data-toggle="pill" href="#menu1"><span class = "mamu"> Next 24 Hours </span></a></li>
+    <li><a data-toggle="pill" href="#menu2"><span class = "mamu"> Next 7 days </span></a></li>
+  
+  </ul>
+  
+  <div class="tab-content">
+    <div id="home" class="tab-pane fade in active">
+    <div id ="normalone" class="col-xs-6" style="height:100%;width:50%">
+      <table class="table">
+      <thead bgcolor="#FF6666">
+        <tr>
+        
+        <th id="icon" align="right" rowspan="2"> </th>
+        <th id="summary" colspan="3"> </th>
+        </tr>
+        
+        
+        
+        
+      </thead>
+      <tbody>
+      <tr class="success" >
+        <td colspan="2">Precipitation</td>
+        <td colspan="2" id="precipitation" align="center" ></td>
+      </tr>
+      <tr class="danger">
+        <td colspan="2">Chance of Rain</td>
+        <td colspan="2" id="rain" align="center" ></td>
+        
+      </tr>
+      <tr class="success">
+        <td colspan="2">Wind Speed</td>
+        <td id="wind" colspan="2" align="center" ></td>
+        
+      </tr>
+      <tr class="danger">
+        <td colspan="2" >Dew Point</td>
+        <td id="dew" colspan="2" align="center" ></td>
+      </tr>
+      <tr class="success">
+        <td colspan="2" >Humidity</td>
+        <td id="humidity" colspan="2" align="center" ></td>
+        
+      </tr>
+      <tr class="danger">
+        <td colspan="2" >Visibility</td>
+        <td id="visibility" colspan="2" align="center" ></td>
+        
+      </tr>
+      <tr class="success">
+        <td colspan="2">Sunrise</td>
+        <td id ="sunRisee" colspan="2" align="center" ></td>
+      </tr>
+      <tr class="danger">
+        <td colspan="2">Sunset</td>
+        <td id = "sunSett" colspan="2" align="center" ></td>
+      </tr>
+      
+      
+    </tbody>      
+    </table>
+    </div>
+
+    <div id="bakchod" class="col-xs-6" style="height:100%;">
+      
+    </div>
+    </div>
+    <div id="menu1" class="tab-pane fade">
+      <table class="table">
+        <thead>
+          <tr bgcolor="#2A60FF">
+            <th>Time </th>
+            <th>Summary</th>
+            <th>Cloud Cover </th>
+            <th>Temp(°F)</th>
+            <th>View Details</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class = "info">
+            <td id ="timee1"></td>
+            <td id="s1" ></td>
+            <td id="cc1"></td>
+            <td id = "t1"></td>
+            <td>
+            <a href="#"><span class="glyphicon glyphicon-plus" data-toggle="collapse" data-target="#demo"></span></a>
+            <div id="demo" class="collapse in">
+                <table class="table">
+                    <tbody>
+                        <tr class="info">
+                            <th>Wind</th>
+                            <th>Humidity</th>
+                            <th>Visibility</th>
+                            <th>Pressure</th>
+                        </tr>
+                        <tr>
+                            <td id="wind1"> </td>
+                            <td id="humidity1"></td>
+                            <td id="visible1"></td>
+                            <td id="pressure1"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            </td>
+          </tr>
+          <tr class = "danger">
+            <td id ="timee2"></td>
+            <td id="s2" ></td>
+            <td id="cc2"></td>
+            <td id = "t2"></td>
+            <td>
+              <a href="#"><span class="glyphicon glyphicon-plus" data-toggle="collapse" data-target="#demo1"></span></a>
+            <div id="demo1" class="collapse in">
+                <table class="table">
+                    <tbody>
+                        <tr class="info">
+                            <th>Wind</th>
+                            <th>Humidity</th>
+                            <th>Visibility</th>
+                            <th>Pressure</th>
+                        </tr>
+                        <tr>
+                            <td id="wind2"> </td>
+                            <td id="humidity2"></td>
+                            <td id="visible2"></td>
+                            <td id="pressure2"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            </td>
+          </tr>
+          <tr class = "info">
+            <td id ="timee3"></td>
+            <td id="s3" ></td>
+            <td id="cc3"></td>
+            <td id = "t3"></td>
+            <td>
+              <a href="#"><span class="glyphicon glyphicon-plus" data-toggle="collapse" data-target="#demo2"></span></a>
+            <div id="demo2" class="collapse in">
+                <table class="table">
+                    <tbody>
+                        <tr class="info">
+                            <th>Wind</th>
+                            <th>Humidity</th>
+                            <th>Visibility</th>
+                            <th>Pressure</th>
+                        </tr>
+                        <tr>
+                            <td id="wind3"> </td>
+                            <td id="humidity3"></td>
+                            <td id="visible3"></td>
+                            <td id="pressure3"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            </td>
+          </tr>
+          <tr class = "danger">
+            <td id ="timee4"></td>
+            <td id="s4" ></td>
+            <td id="cc4"></td>
+            <td id = "t4"></td>
+            <td>
+              <a href="#"><span class="glyphicon glyphicon-plus" data-toggle="collapse" data-target="#demo3"></span></a>
+            <div id="demo3" class="collapse in">
+                <table class="table">
+                    <tbody>
+                        <tr class="info">
+                            <th>Wind</th>
+                            <th>Humidity</th>
+                            <th>Visibility</th>
+                            <th>Pressure</th>
+                        </tr>
+                        <tr>
+                            <td id="wind4"> </td>
+                            <td id="humidity4"></td>
+                            <td id="visible4"></td>
+                            <td id="pressure4"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            </td>
+          </tr>
+          <tr class = "info">
+            <td id ="timee5"></td>
+            <td id="s5" ></td>
+            <td id="cc5"></td>
+            <td id = "t5"></td>
+            <td>
+              <a href="#"><span class="glyphicon glyphicon-plus" data-toggle="collapse" data-target="#demo4"></span></a>
+            <div id="demo4" class="collapse in">
+                <table class="table">
+                    <tbody>
+                        <tr class="info">
+                            <th>Wind</th>
+                            <th>Humidity</th>
+                            <th>Visibility</th>
+                            <th>Pressure</th>
+                        </tr>
+                        <tr>
+                            <td id="wind5"> </td>
+                            <td id="humidity5"></td>
+                            <td id="visible5"></td>
+                            <td id="pressure5"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            </td>
+          </tr>
+          <tr class = "danger">
+            <td id ="timee6"></td>
+            <td id="s6" ></td>
+            <td id="cc6"></td>
+            <td id = "t6"></td>
+            <td>
+              <a href="#"><span class="glyphicon glyphicon-plus" data-toggle="collapse" data-target="#demo5"></span></a>
+            <div id="demo5" class="collapse in">
+                <table class="table">
+                    <tbody>
+                        <tr class="info">
+                            <th>Wind</th>
+                            <th>Humidity</th>
+                            <th>Visibility</th>
+                            <th>Pressure</th>
+                        </tr>
+                        <tr>
+                            <td id="wind6"> </td>
+                            <td id="humidity6"></td>
+                            <td id="visible6"></td>
+                            <td id="pressure6"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            </td>
+          </tr>
+          <tr class = "info">
+            <td id ="timee7"></td>
+            <td id="s7" ></td>
+            <td id="cc7"></td>
+            <td id = "t7"></td>
+            <td>
+              <a href="#"><span class="glyphicon glyphicon-plus" data-toggle="collapse" data-target="#demo6"></span></a>
+            <div id="demo6" class="collapse in">
+                <table class="table">
+                    <tbody>
+                        <tr class="info">
+                            <th>Wind</th>
+                            <th>Humidity</th>
+                            <th>Visibility</th>
+                            <th>Pressure</th>
+                        </tr>
+                        <tr>
+                            <td id="wind7"> </td>
+                            <td id="humidity7"></td>
+                            <td id="visible7"></td>
+                            <td id="pressure7"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            </td>
+          </tr>
+          <tr class = "danger">
+            <td id ="timee8"></td>
+            <td id="s8" ></td>
+            <td id="cc8"></td>
+            <td id = "t8"></td>
+            <td>
+              <a href="#"><span class="glyphicon glyphicon-plus" data-toggle="collapse" data-target="#demo7"></span></a>
+            <div id="demo7" class="collapse in">
+                <table class="table">
+                    <tbody>
+                        <tr class="info">
+                            <th>Wind</th>
+                            <th>Humidity</th>
+                            <th>Visibility</th>
+                            <th>Pressure</th>
+                        </tr>
+                        <tr>
+                            <td id="wind8"> </td>
+                            <td id="humidity8"></td>
+                            <td id="visible8"></td>
+                            <td id="pressure8"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            </td>
+          </tr>
+          <tr class = "info">
+            <td id ="timee9"></td>
+            <td id="s9" ></td>
+            <td id="cc9"></td>
+            <td id = "t9"></td>
+            <td>
+              <a href="#"><span class="glyphicon glyphicon-plus" data-toggle="collapse" data-target="#demo8"></span></a>
+            <div id="demo8" class="collapse in">
+                <table class="table">
+                    <tbody>
+                        <tr class="info">
+                            <th>Wind</th>
+                            <th>Humidity</th>
+                            <th>Visibility</th>
+                            <th>Pressure</th>
+                        </tr>
+                        <tr>
+                            <td id="wind9"> </td>
+                            <td id="humidity9"></td>
+                            <td id="visible9"></td>
+                            <td id="pressure9"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            </td>
+          </tr>
+          <tr class = "danger">
+            <td id ="timee10"></td>
+            <td id="s10" ></td>
+            <td id="cc10"></td>
+            <td id = "t10"></td>
+            <td>
+              <a href="#"><span class="glyphicon glyphicon-plus" data-toggle="collapse" data-target="#demo9"></span></a>
+            <div id="demo9" class="collapse in">
+                <table class="table">
+                    <tbody>
+                        <tr class="info">
+                            <th>Wind</th>
+                            <th>Humidity</th>
+                            <th>Visibility</th>
+                            <th>Pressure</th>
+                        </tr>
+                        <tr>
+                            <td id="wind10"> </td>
+                            <td id="humidity10"></td>
+                            <td id="visible10"></td>
+                            <td id="pressure10"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            </td>
+          </tr>
+          <tr class = "info">
+            <td id ="timee11"></td>
+            <td id="s11" ></td>
+            <td id="cc11"></td>
+            <td id = "t11"></td>
+            <td>
+              <a href="#"><span class="glyphicon glyphicon-plus" data-toggle="collapse" data-target="#demo10"></span></a>
+            <div id="demo10" class="collapse in">
+                <table class="table">
+                    <tbody>
+                        <tr class="info">
+                            <th>Wind</th>
+                            <th>Humidity</th>
+                            <th>Visibility</th>
+                            <th>Pressure</th>
+                        </tr>
+                        <tr>
+                            <td id="wind11"> mph</td>
+                            <td id="humidity11"></td>
+                            <td id="visible11"></td>
+                            <td id="pressure11"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            </td>
+          </tr>
+          <tr class = "danger">
+            <td id ="timee12" ></td>
+            <td id="s12" ></td>
+            <td id="cc12"></td>
+            <td id = "t12"></td>
+            <td>
+              <a href="#"><span class="glyphicon glyphicon-plus" data-toggle="collapse" data-target="#demo11"></span></a>
+            <div id="demo11" class="collapse in">
+                <table class="table">
+                    <tbody>
+                        <tr class="info">
+                            <th>Wind</th>
+                            <th>Humidity</th>
+                            <th>Visibility</th>
+                            <th>Pressure</th>
+                        </tr>
+                        <tr>
+                            <td id="wind12"> mph</td>
+                            <td id="humidity12"></td>
+                            <td id="visible12"></td>
+                            <td id="pressure12"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            </td>
+          </tr>
+          <tr class = "info">
+            <td id ="timee13"></td>
+            <td id="s13" ></td>
+            <td id="cc13"></td>
+            <td id = "t13"></td>
+            <td>
+              <a href="#"><span class="glyphicon glyphicon-plus" data-toggle="collapse" data-target="#demo12"></span></a>
+            <div id="demo12" class="collapse in">
+                <table class="table">
+                    <tbody>
+                        <tr class="info">
+                            <th>Wind</th>
+                            <th>Humidity</th>
+                            <th>Visibility</th>
+                            <th>Pressure</th>
+                        </tr>
+                        <tr>
+                            <td id="wind13"> </td>
+                            <td id="humidity13"></td>
+                            <td id="visible13"></td>
+                            <td id="pressure13"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            </td>
+          </tr>
+          <tr class = "danger">
+            <td id ="timee14"></td>
+            <td id="s14" ></td>
+            <td id="cc14"></td>
+            <td id = "t14"></td>
+            <td>
+              <a href="#"><span class="glyphicon glyphicon-plus" data-toggle="collapse" data-target="#demo13"></span></a>
+            <div id="demo13" class="collapse in">
+                <table class="table">
+                    <tbody>
+                        <tr class="info">
+                            <th>Wind</th>
+                            <th>Humidity</th>
+                            <th>Visibility</th>
+                            <th>Pressure</th>
+                        </tr>
+                        <tr>
+                            <td id="wind14"> </td>
+                            <td id="humidity14"> </td>
+                            <td id="visible14"> </td>
+                            <td id="pressure14"> </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            </td>
+          </tr>
+          <tr class = "info">
+            <td id ="timee15"></td>
+            <td id="s15" ></td>
+            <td id="cc15"></td>
+            <td id = "t15"></td>
+            <td>
+              <a href="#"><span class="glyphicon glyphicon-plus" data-toggle="collapse" data-target="#demo14"></span></a>
+            <div id="demo14" class="collapse in">
+                <table class="table">
+                    <tbody>
+                        <tr class="info">
+                            <th>Wind</th>
+                            <th>Humidity</th>
+                            <th>Visibility</th>
+                            <th>Pressure</th>
+                        </tr>
+                        <tr>
+                            <td id="wind15"> </td>
+                            <td id="humidity15"></td>
+                            <td id="visible15"></td>
+                            <td id="pressure15"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            </td>
+          </tr>
+          <tr class = "danger">
+            <td id ="timee16"></td>
+            <td id="s16" ></td>
+            <td id="cc16"></td>
+            <td id = "t16"></td>
+            <td>
+              <a href="#"><span class="glyphicon glyphicon-plus" data-toggle="collapse" data-target="#demo15"></span></a>
+            <div id="demo15" class="collapse in">
+                <table class="table">
+                    <tbody>
+                        <tr class="info">
+                            <th>Wind</th>
+                            <th>Humidity</th>
+                            <th>Visibility</th>
+                            <th>Pressure</th>
+                        </tr>
+                        <tr>
+                            <td id="wind16"> </td>
+                            <td id="humidity16"> </td>
+                            <td id="visible16"></td>
+                            <td id="pressure16"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            </td>
+          </tr>
+          <tr class = "info">
+            <td id ="timee17"></td>
+            <td id="s17" ></td>
+            <td id="cc17"></td>
+            <td id = "t17"></td>
+            <td>
+              <a href="#"><span class="glyphicon glyphicon-plus" data-toggle="collapse" data-target="#demo16"></span></a>
+            <div id="demo16" class="collapse in">
+                <table class="table">
+                    <tbody>
+                        <tr class="info">
+                            <th>Wind</th>
+                            <th>Humidity</th>
+                            <th>Visibility</th>
+                            <th>Pressure</th>
+                        </tr>
+                        <tr>
+                            <td id="wind17"> </td>
+                            <td id="humidity17"></td>
+                            <td id="visible17"></td>
+                            <td id="pressure17"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            </td>
+          </tr>
+          <tr class = "danger">
+            <td id ="timee18"></td>
+            <td id="s18" ></td>
+            <td id="cc18"></td>
+            <td id = "t18"></td>
+            <td>
+              <a href="#"><span class="glyphicon glyphicon-plus" data-toggle="collapse" data-target="#demo17"></span></a>
+            <div id="demo17" class="collapse in">
+                <table class="table">
+                    <tbody>
+                        <tr class="info">
+                            <th>Wind</th>
+                            <th>Humidity</th>
+                            <th>Visibility</th>
+                            <th>Pressure</th>
+                        </tr>
+                        <tr>
+                            <td id="wind18"></td>
+                            <td id="humidity18"></td>
+                            <td id="visible18"></td>
+                            <td id="pressure18"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            </td>
+          </tr>
+          <tr class = "info">
+            <td id ="timee19"></td>
+            <td id="s19" ></td>
+            <td id="cc19"></td>
+            <td id = "t19"></td>
+            <td>
+              <a href="#"><span class="glyphicon glyphicon-plus" data-toggle="collapse" data-target="#demo18"></span></a>
+            <div id="demo18" class="collapse in">
+                <table class="table">
+                    <tbody>
+                        <tr class="info">
+                            <th>Wind</th>
+                            <th>Humidity</th>
+                            <th>Visibility</th>
+                            <th>Pressure</th>
+                        </tr>
+                        <tr>
+                            <td id="wind19"> </td>
+                            <td id="humidity19"></td>
+                            <td id="visible19"></td>
+                            <td id="pressure19"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            </td>
+          </tr>
+          <tr class = "danger">
+            <td id ="timee20"></td>
+            <td id="s20" ></td>
+            <td id="cc20"></td>
+            <td id = "t20"></td>
+            <td>
+              <a href="#"><span class="glyphicon glyphicon-plus" data-toggle="collapse" data-target="#demo19"></span></a>
+            <div id="demo19" class="collapse in">
+                <table class="table">
+                    <tbody>
+                        <tr class="info">
+                            <th>Wind</th>
+                            <th>Humidity</th>
+                            <th>Visibility</th>
+                            <th>Pressure</th>
+                        </tr>
+                        <tr>
+                            <td id="wind20"> </td>
+                            <td id="humidity20"></td>
+                            <td id="visible20"></td>
+                            <td id="pressure20"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            </td>
+          </tr>
+          <tr class = "info">
+            <td id ="timee21"></td>
+            <td id="s21" ></td>
+            <td id="cc21"></td>
+            <td id = "t21"></td>
+            <td>
+              <a href="#"><span class="glyphicon glyphicon-plus" data-toggle="collapse" data-target="#demo20"></span></a>
+            <div id="demo20" class="collapse in">
+                <table class="table">
+                    <tbody>
+                        <tr class="info">
+                            <th>Wind</th>
+                            <th>Humidity</th>
+                            <th>Visibility</th>
+                            <th>Pressure</th>
+                        </tr>
+                        <tr>
+                            <td id="wind21"> </td>
+                            <td id="humidity21"></td>
+                            <td id="visible21"></td>
+                            <td id="pressure21"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            </td>
+          </tr>
+          <tr class = "danger">
+            <td id ="timee22"></td>
+            <td id="s22" ></td>
+            <td id="cc22"></td>
+            <td id = "t22"></td>
+            <td>
+              <a href="#"><span class="glyphicon glyphicon-plus" data-toggle="collapse" data-target="#demo21"></span></a>
+            <div id="demo21" class="collapse in">
+                <table class="table">
+                    <tbody>
+                        <tr class="info">
+                            <th>Wind</th>
+                            <th>Humidity</th>
+                            <th>Visibility</th>
+                            <th>Pressure</th>
+                        </tr>
+                        <tr>
+                            <td id="wind22"> </td>
+                            <td id="humidity22"></td>
+                            <td id="visible22"></td>
+                            <td id="pressure22"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            </td>
+          </tr>
+          <tr class = "info">
+            <td id ="timee23"></td>
+            <td id="s23" ></td>
+            <td id="cc23"></td>
+            <td id = "t23"></td>
+            <td>
+              <a href="#"><span class="glyphicon glyphicon-plus" data-toggle="collapse" data-target="#demo22"></span></a>
+            <div id="demo22" class="collapse in">
+                <table class="table">
+                    <tbody>
+                        <tr class="info">
+                            <th>Wind</th>
+                            <th>Humidity</th>
+                            <th>Visibility</th>
+                            <th>Pressure</th>
+                        </tr>
+                        <tr>
+                            <td id="wind23"> </td>
+                            <td id="humidity23"></td>
+                            <td id="visible23"></td>
+                            <td id="pressure23"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            </td>
+          </tr>
+          <tr class = "danger">
+            <td id ="timee24"></td>
+            <td id="s24" ></td>
+            <td id="cc24"></td>
+            <td id = "t24"></td>
+            <td>
+              <a href="#"><span class="glyphicon glyphicon-plus" data-toggle="collapse" data-target="#demo23"></span></a>
+            <div id="demo23" class="collapse in">
+                <table class="table">
+                    <tbody>
+                        <tr class="info">
+                            <th>Wind</th>
+                            <th>Humidity</th>
+                            <th>Visibility</th>
+                            <th>Pressure</th>
+                        </tr>
+                        <tr>
+                            <td id="wind24"> </td>
+                            <td id="humidity24"></td>
+                            <td id="visible24"></td>
+                            <td id="pressure24"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            </td>
+          </tr>
+        </tbody>
+
+      </table>
+    </div>
+
+    <div id="menu2" class="tab-pane fade">
+    <div class="container" id="damru" >
+  <div class="row" id="a" style="margin:auto;position:relative;" >
+
+  <div class ="col-md-1"></div>
+  <div class ="col-md-1"></div>
+   
+    <a href="#">
+    <div class="col-md-1" style="background-color:#2A60FF;border: 2px solid #000000;border-radius: 10px;text-align:center;" data-toggle="modal" data-target="#myModal1">
+      <span id="divas1" style="color:rgb(255,255,255); font-weight: bold;"> </span> <br><br>
+      <span id="mahina1" style="color:rgb(255,255,255);font-weight: bold;"> </span> <br><br>
+      <span id="ic1" style="color:rgb(255,255,255);font-weight: bold;"> </span> <br>
+      <span style="color:rgb(255,255,255);font-weight: bold;">Min</span> <br>
+      <span style="color:rgb(255,255,255);font-weight: bold;"> Temp </span> <br><br>
+      <span id="mintemp1" style="color:rgb(255,255,255);font-weight: bold;font-size: 120%;" ></span> <br><br>
+      <span style="color:rgb(255,255,255);font-weight: bold;">Max</center><br>
+      <span style="color:rgb(255,255,255);font-weight: bold;">Temp</center><br><br>
+      <span id = "maxtemp1" style="color:rgb(255,255,255);font-weight: bold;font-size: 120%;"></span> <br>
+      </div>
+      </a>
+      <div class="modal fade" id="myModal1" role="dialog">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+            
+          <h4 class="modal-title" id="chu1"> </h4>
+        </div>
+        <div class="modal-body">
+             <table class="table">
+            <tbody>
+              <tr> <td id ="image1" align="center" colspan="3"> </td></tr>
+              <tr><td colspan="3" id = "daysum1"> </td></tr>
+              <tr>
+                <td> Sunrise time </td>
+                <td> Sunset Time</td>
+                <td> Humidity</td>
+              </tr>
+              <tr>
+                <td id="sunno1"> </td>
+                <td id="sunao1"></td>
+                <td id="hum1" > </td>
+              </tr>
+              <tr>
+                <td> Windspeed</td>
+                <td> Visibilty</td>
+                <td> Pressure</td>
+              </tr>
+              <tr>
+                <td id="windu1"> </td>
+                <td id="vi1"> </td>
+                <td id="pres1"> </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+        </div>
+        </div>
+
+
+     </div>
+     
+    
+
+
+    
+      
+
+    <a href="#">
+    <div class="col-md-1" style="background-color:#EB0000;border: 2px solid #000000;border-radius: 10px;text-align:center; " data-toggle="modal" data-target="#myModal2">
+    
+    
+    
+
+      <span id="divas2" style="color:rgb(255,255,255);font-weight: bold;"> </span> <br><br>
+      <span id="mahina2" style="color:rgb(255,255,255);font-weight: bold;"></span> <br><br>
+      <span id="ic2" style="color:rgb(255,255,255);font-weight: bold;"></span> <br>
+      <span style="color:rgb(255,255,255);font-weight: bold;">  Min </span> <br>
+      <span style="color:rgb(255,255,255);font-weight: bold;">  Temp  </span> <br><br>
+      <span id="mintemp2" style="color:rgb(255,255,255);font-weight: bold;font-size: 120%;" ></span> <br><br>
+      <span style="color:rgb(255,255,255);font-weight: bold;">  Max </span> <br>
+      <span style="color:rgb(255,255,255);font-weight: bold;">  Temp </span> <br><br>
+      <span id = "maxtemp2" style="color:rgb(255,255,255);font-weight: bold;font-size: 120%;"></span> <br>
+
+      </div>
+      </a>
+
+  <div class="modal fade" id="myModal2" role="dialog">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+            
+          <h4 class="modal-title" id="chu2"> </h4>
+        </div>
+        <div class="modal-body">
+             <table class="table">
+            <tbody>
+              <tr> <td id ="image2" align="center" colspan="3"> </td></tr>
+              <tr><td colspan="3" id = "daysum2"> </td></tr>
+              <tr>
+                <td> Sunrise time </td>
+                <td> Sunset Time</td>
+                <td> Humidity</td>
+              </tr>
+              <tr>
+                <td id="sunno2"> </td>
+                <td id="sunao2"></td>
+                <td id="hum2" > </td>
+              </tr>
+              <tr>
+                <td> Windspeed</td>
+                <td> Visibilty</td>
+                <td> Pressure</td>
+              </tr>
+              <tr>
+                <td id="windu2"> </td>
+                <td id="vi2"> </td>
+                <td id="pres2"> </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+  
+  </div>
+  </div>
+  </div>
+
+
+    
+
+
+    <a href="#">
+    <div class="col-md-1" style="background-color:#FF8433;border: 2px solid #000000;border-radius: 10px;text-align:center;" data-toggle="modal" data-target="#myModal3">
+    
+    
+    
+
+    <span id="divas3" style="color:rgb(255,255,255);font-weight: bold;"> </span> <br><br>
+      <span id="mahina3" style="color:rgb(255,255,255);font-weight: bold;"></span> <br><br>
+      <span id="ic3" style="color:rgb(255,255,255);font-weight: bold;"></span> <br>
+      <span style="color:rgb(255,255,255);font-weight: bold;"> Min  </span> <br>
+      <span style="color:rgb(255,255,255);font-weight: bold;"> Temp</span> <br><br>
+      <span id="mintemp3" style="color:rgb(255,255,255);font-weight: bold;font-size: 120%;" ></span> <br><br>
+      <span style="color:rgb(255,255,255);font-weight: bold;"> Max</span> <br>
+      <span style="color:rgb(255,255,255);font-weight: bold;"> Temp</span> <br><br>
+      <span id = "maxtemp3" style="color:rgb(255,255,255);font-weight: bold;font-size: 120%;"></span> <br>
+
+      </div>
+      </a>
+
+  <div class="modal fade" id="myModal3" role="dialog">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+            
+          <h4 class="modal-title" id="chu3"></h4>
+        </div>
+        <div class="modal-body">
+             <table class="table">
+            <tbody>
+              <tr> <td id ="image3" align="center" colspan="3"> </td></tr>
+              <tr><td colspan="3" id = "daysum3"> </td></tr>
+              <tr>
+                <td> Sunrise time </td>
+                <td> Sunset Time</td>
+                <td> Humidity</td>
+              </tr>
+              <tr>
+                <td id="sunno3"> </td>
+                <td id="sunao3"></td>
+                <td id="hum3" > </td>
+              </tr>
+              <tr>
+                <td> Windspeed</td>
+                <td> Visibilty</td>
+                <td> Pressure</td>
+              </tr>
+              <tr>
+                <td id="windu3"> </td>
+                <td id="vi3"> </td>
+                <td id="pres3"> </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+  
+  </div>
+  </div>
+  </div>
+
+
+    
+
+
+    <a href ="#">
+         <div class="col-md-1" style="background-color:#77D277;border: 2px solid #000000;border-radius: 10px;text-align:center; " data-toggle="modal" data-target="#myModal4">
+    
+    
+    
+
+    <span id="divas4" style="color:rgb(255,255,255);font-weight: bold;"> </span> <br><br>
+      <span id="mahina4" style="color:rgb(255,255,255);font-weight: bold;"> </span> <br><br>
+      <span id="ic4" style="color:rgb(255,255,255);font-weight: bold;"></span> <br>
+      <span style="color:rgb(255,255,255);font-weight: bold;">  Min </span> <br>
+      <span style="color:rgb(255,255,255);font-weight: bold;">  Temp</span> <br><br>
+      <span id="mintemp4" style="color:rgb(255,255,255);font-weight: bold;font-size: 120%;" ></span> <br><br>
+      <span style="color:rgb(255,255,255);font-weight: bold;"> Max </span> <br>
+      <span style="color:rgb(255,255,255);font-weight: bold;">Temp </span> <br><br>
+      <span id = "maxtemp4" style="color:rgb(255,255,255);font-weight: bold;font-size: 120%;"></span> <br>
+</div>
+  </a>
+
+  <div class="modal fade" id="myModal4" role="dialog">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+            
+          <h4 class="modal-title" id="chu4"> </h4>
+        </div>
+        <div class="modal-body">
+             <table class="table">
+            <tbody>
+              <tr> <td id ="image4" align="center" colspan="3"> </td></tr>
+              <tr><td colspan="3" id = "daysum4"> </td></tr>
+              <tr>
+                <td> Sunrise time </td>
+                <td> Sunset Time</td>
+                <td> Humidity</td>
+              </tr>
+              <tr>
+                <td id="sunno4"> </td>
+                <td id="sunao4"></td>
+                <td id="hum4" > </td>
+              </tr>
+              <tr>
+                <td> Windspeed</td>
+                <td> Visibilty</td>
+                <td> Pressure</td>
+              </tr>
+              <tr>
+                <td id="windu4"> </td>
+                <td id="vi4"> </td>
+                <td id="pres4"> </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+  
+  </div>
+  </div>
+  </div>
+
+
+  
+      <a href="#">
+       <div class="col-md-1" style="background-color:#E082FF;border: 2px solid #000000;border-radius: 10px;text-align:center; " data-toggle="modal" data-target="#myModal5">
+    
+    
+    
+
+    <span id="divas5" style="color:rgb(255,255,255);font-weight: bold;"> </span> <br><br>
+      <span id="mahina5" style="color:rgb(255,255,255);font-weight: bold;"></span> <br><br>
+      <span id="ic5" style="color:rgb(255,255,255);font-weight: bold;"></span> <br>
+      <span style="color:rgb(255,255,255);font-weight: bold;"> Min </span> <br>
+      <span style="color:rgb(255,255,255);font-weight: bold;"> Temp </span> <br><br>
+      <span id="mintemp5" style="color:rgb(255,255,255);font-weight: bold;font-size: 120%;" ></span> <br><br>
+      <span style="color:rgb(255,255,255);font-weight: bold;"> Max</span> <br>
+      <span style="color:rgb(255,255,255);font-weight: bold;"> Temp</span> <br><br>
+      <span id = "maxtemp5" style="color:rgb(255,255,255);font-weight: bold;font-size: 120%;"> </span> <br>
+
+      </div>
+      </a>
+
+  <div class="modal fade" id="myModal5" role="dialog">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+            
+          <h4 class="modal-title" id="chu5"> </h4>
+        </div>
+        <div class="modal-body">
+            <table class="table">
+            <tbody>
+              <tr> <td id ="image5" align="center" colspan="3"> </td></tr>
+              <tr><td colspan="3" id = "daysum5"> </td></tr>
+              <tr>
+                <td> Sunrise time </td>
+                <td> Sunset Time</td>
+                <td> Humidity</td>
+              </tr>
+              <tr>
+                <td id="sunno5"> </td>
+                <td id="sunao5"></td>
+                <td id="hum5" > </td>
+              </tr>
+              <tr>
+                <td> Windspeed</td>
+                <td> Visibilty</td>
+                <td> Pressure</td>
+              </tr>
+              <tr>
+                <td id="windu5"> </td>
+                <td id="vi5"> </td>
+                <td id="pres5"> </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+  
+  </div>
+  </div>
+  </div>
+
+
+  
+        <a href="#">
+         <div class="col-md-1" style="background-color:#FF6666;border: 2px solid #000000;border-radius: 10px;text-align:center;" data-toggle="modal" data-target="#myModal6">
+    
+    
+    
+
+   <span id="divas6" style="color:rgb(255,255,255);font-weight: bold;"> </span> <br><br>
+      <span id="mahina6" style="color:rgb(255,255,255);font-weight: bold;"></span> <br><br>
+      <span id="ic6" style="color:rgb(255,255,255);font-weight: bold;"></span> <br>
+      <span style="color:rgb(255,255,255);font-weight: bold;">  Min</span> <br>
+      <span style="color:rgb(255,255,255);font-weight: bold;">  Temp </span> <br><br>
+      <span id="mintemp6" style="color:rgb(255,255,255);font-weight: bold;font-size: 120%;" ></span> <br><br>
+      <span style="color:rgb(255,255,255);font-weight: bold;"> Max</span> <br>
+      <span style="color:rgb(255,255,255);font-weight: bold;"> Temp</span> <br><br>
+      <span id = "maxtemp6" style="color:rgb(255,255,255);font-weight: bold;font-size: 120%;"></span> <br>
+
+      </div>
+      </a>
+
+  <div class="modal fade" id="myModal6" role="dialog">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+            
+          <h4 class="modal-title" id="chu6"> </h4>
+        </div>
+        <div class="modal-body">
+             <table class="table">
+            <tbody>
+              <tr> <td id ="image6" align="center" colspan="3"> </td></tr>
+              <tr><td colspan="3" id = "daysum6"> </td></tr>
+              <tr>
+                <td> Sunrise time </td>
+                <td> Sunset Time</td>
+                <td> Humidity</td>
+              </tr>
+              <tr>
+                <td id="sunno6"> </td>
+                <td id="sunao6"></td>
+                <td id="hum6" > </td>
+              </tr>
+              <tr>
+                <td> Windspeed</td>
+                <td> Visibilty</td>
+                <td> Pressure</td>
+              </tr>
+              <tr>
+                <td id="windu6"> </td>
+                <td id="vi6"> </td>
+                <td id="pres6"> </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+  
+  </div>
+  </div>
+  </div>
+
+
+    
+  
+  <a href="#">
+         <div class="col-md-1" style="background-color:#FF1A75;border: 2px solid #000000;border-radius: 10px;text-align:center;" data-toggle="modal" data-target="#myModal7">
+    
+    
+    
+
+  <span id="divas7" style="color:rgb(255,255,255);font-weight: bold;"> </span> <br><br>
+      <span id="mahina7" style="color:rgb(255,255,255);font-weight: bold;"></span> <br><br>
+      <span id="ic7" style="color:rgb(255,255,255);font-weight: bold;"></span> <br>
+      <span style="color:rgb(255,255,255);font-weight: bold;"> Min </span> <br>
+      <span style="color:rgb(255,255,255);font-weight: bold;"> Temp</span> <br><br>
+      <span id="mintemp7" style="color:rgb(255,255,255);font-weight: bold;font-size: 120%;" ></span> <br><br>
+      <span style="color:rgb(255,255,255);font-weight: bold;">Max</span> <br>
+      <span style="color:rgb(255,255,255);font-weight: bold;">Temp</span> <br><br>
+      <span id = "maxtemp7" style="color:rgb(255,255,255);font-weight: bold;font-size: 120%;"></span> <br>
+
+</div>
+</a>
+  <div class="modal fade" id="myModal7" role="dialog">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+            
+          <h4 class="modal-title" id="chu7"> </h4>
+        </div>
+        <div class="modal-body">
+             <table class="table">
+            <tbody>
+              <tr> <td id ="image7" align="center" colspan="3"> </td></tr>
+              <tr><td colspan="3" id = "daysum7"> </td></tr>
+              <tr>
+                <td> Sunrise time </td>
+                <td> Sunset Time</td>
+                <td> Humidity</td>
+              </tr>
+              <tr>
+                <td id="sunno7"> </td>
+                <td id="sunao7"></td>
+                <td id="hum7" > </td>
+              </tr>
+              <tr>
+                <td> Windspeed</td>
+                <td> Visibilty</td>
+                <td> Pressure</td>
+              </tr>
+              <tr>
+                <td id="windu7"> </td>
+                <td id="vi7"> </td>
+                <td id="pres7"> </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+  
+  </div>
+  </div>
+  </div>
+
+
+    <div class ="col-md-1"></div>
+    <div class ="col-md-1"></div>
+     <div class ="col-md-1"></div> 
+  
+</div>
+</div>
+
+    </div>
+ 
+  
+  	<script>
+
+function myfunction() {
+  
+  
+  document.getElementById("chaklya").innerHTML = "";
+  if(document.getElementById) {
+  document.forecast.address.value = "";
+  document.forecast.city.value="";
+  document.forecast.state.value="";
+  }
+}
+
+</script>
+
+</body>
+</html>
