@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        jar="/home/prayag/Android/Sdk/extras/android/m2repository/com/android/support/support-annotations/23.0.1/support-annotations-23.0.1.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="1fce89a6428c51467090d7f424e4c9c3dbd55f7e">
+        <dex dex="/home/prayag/AndroidStudioProjects/ForecastSearch/app/build/intermediates/pre-dexed/debug/support-annotations-23.0.1-a075b63f9c5a9f44bc208e0f30c26bd3f3434356.jar" />
+    </item>
+    <item
+        jar="/home/prayag/AndroidStudioProjects/ForecastSearch/app/build/intermediates/exploded-aar/com.android.support/support-v4/23.0.1/jars/classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="c31e21b53ff2f74664e498248d01453a32e32d48">
+        <dex dex="/home/prayag/AndroidStudioProjects/ForecastSearch/app/build/intermediates/pre-dexed/debug/classes-1cc83c86689692ecd90971ffece809d87ed62f93.jar" />
+    </item>
+    <item
+        jar="/home/prayag/AndroidStudioProjects/ForecastSearch/app/build/intermediates/exploded-aar/com.android.support/support-v4/23.0.1/jars/libs/internal_impl-23.0.1.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="aa92916125166649d8ad4ba3940c3dd7515596d3">
+        <dex dex="/home/prayag/AndroidStudioProjects/ForecastSearch/app/build/intermediates/pre-dexed/debug/internal_impl-23.0.1-62835e86433a32a483e819f9d2fc6cdf9c0d3e8e.jar" />
+    </item>
+    <item
+        jar="/home/prayag/AndroidStudioProjects/ForecastSearch/app/build/intermediates/exploded-aar/com.android.support/design/23.0.1/jars/classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="e5c61a3169221a89654ffcaaed47bba51cf071ad">
+        <dex dex="/home/prayag/AndroidStudioProjects/ForecastSearch/app/build/intermediates/pre-dexed/debug/classes-a5f8f127e17a18752c335ea5060b819085ee529d.jar" />
+    </item>
+    <item
+        jar="/home/prayag/AndroidStudioProjects/ForecastSearch/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.0.1/jars/classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="d86429b0f0b3f3cafbeb78dda1b9d89119ccb05d">
+        <dex dex="/home/prayag/AndroidStudioProjects/ForecastSearch/app/build/intermediates/pre-dexed/debug/classes-16ea779461c21f760967f5e4fb92e04ca87bc401.jar" />
+    </item>
+
+</items>
