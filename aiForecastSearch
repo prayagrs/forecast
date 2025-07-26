@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Forecast Search</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Bootstrap 5 (No jQuery needed) -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      background: url('http://cs-server.usc.edu:45678/hw/hw8/images/bg.jpg') no-repeat center center fixed;
+      background-size: cover;
+      min-height: 100vh;
+    }
+    .weather-icon {
+      width: 40px;
+      height: 30px;
+      object-fit: contain;
+    }
+    .main-weather-icon {
+      width: 80px;
+      height: 80px;
+      object-fit: contain;
+    }
+    .weather-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid #eee;
+      padding: 6px 0;
+    }
+    #map {
+      height: 300px;
+      width: 100%;
+      margin: 16px 0;
+    }
+    .weather-summary {
+      font-size: 1.25rem;
+      color: #fff;
+    }
+    .form-label {
+      color: #fff;
+      font-weight: bold;
+    }
+    .container-bg {
+      background: rgba(0,0,0,0.7);
+      border-radius: 12px;
+      padding: 32px;
+      margin-top: 48px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    }
+    @media (max-width: 600px) {
+      .container-bg { padding: 16px; }
+    }
+  </style>
+  <!-- Moment + Timezone -->
+  <script src="https://cdn.jsdelivr.net/npm/moment@2.30.1/min/moment.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/moment-timezone@0.5.40/builds/moment-timezone-with-data.min.js"></script>
+  <!-- OpenLayers (keep only if you still need the map) -->
+  <script src="https://cdn.jsdelivr.net/npm/ol@v7.3.0/dist/ol.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ol@v7.3.0/ol.css">
+</head>
+<body>
+  <div class="container container-bg">
+    <h2 class="mb-4 text-center text-white">Weather Forecast</h2>
+    <form id="forecast-form" novalidate>
+      <div class="row g-3">
+        <div class="col-md-4">
+          <label for="address" class="form-label">Address</label>
+          <input id="address" name="address" type="text" class="form-control" required>
+          <div class="invalid-feedback">Enter address</div>
+        </div>
+        <div class="col-md-4">
+          <label for="city" class="form-label">City</label>
+          <input id="city" name="city" type="text" class="form-control" required>
+          <div class="invalid-feedback">Enter city</div>
+        </div>
+        <div class="col-md-4">
+          <label for="state" class="form-label">State</label>
+          <select id="state" name="state" class="form-select" required>
+            <option value="">Select state</option>
+            <!-- Add all US state options here -->
+            <option value="CA">California</option>
+            <!-- ... etc ... -->
+          </select>
+          <div class="invalid-feedback">Select state</div>
+        </div>
+      </div>
+      <div class="row g-3 mt-2">
+        <div class="col-md-6">
+          <label class="form-label">Units</label>
+          <div>
+            <input type="radio" id="us" name="units" value="us" checked>
+            <label for="us">US (°F, mph)</label>
+            <input type="radio" id="si" name="units" value="si" class="ms-3">
+            <label for="si">SI (°C, m/s)</label>
+          </div>
+        </div>
+        <div class="col-md-6 text-end">
+          <button type="submit" class="btn btn-primary">Search</button>
+        </div>
+      </div>
+    </form>
+    <!-- Weather display -->
+    <div id="weather-result" class="mt-4 d-none">
+      <div class="d-flex align-items-center mb-3">
+        <div id="icon"></div>
+        <div class="ms-4">
+          <div class="weather-summary" id="summary"></div>
+          <div>
+            <span id="min"></span> | <span id="max"></span>
+            <button id="fb-share" class="btn btn-link btn-sm p-0 ms-3" style="vertical-align: middle;" title="Share on Facebook">
+              <img src="http://cs-server.usc.edu:45678/hw/hw8/images/fb_icon.png" width="30" height="30" alt="Share on Facebook"/>
+            </button>
+          </div>
+        </div>
+      </div>
+      <div id="main-details" class="row mb-2 text-white">
+        <div class="col">Temperature: <span id="temperature"></span></div>
+        <div class="col">Humidity: <span id="humidity"></span></div>
+        <div class="col">Dew Point: <span id="dew"></span></div>
+        <div class="col">Wind: <span id="wind"></span></div>
+        <div class="col">Visibility: <span id="visibility"></span></div>
+      </div>
+      <div class="row mb-2 text-white">
+        <div class="col">Precipitation: <span id="precipitation"></span></div>
+        <div class="col">Rain Probability: <span id="rain"></span></div>
+        <div class="col">Sunrise: <span id="sunrise"></span></div>
+        <div class="col">Sunset: <span id="sunset"></span></div>
+      </div>
+      <div id="map"></div>
+      <h5 class="mt-4 text-white">Next 20 Hours</h5>
+      <div id="hourly-forecast"></div>
+    </div>
+  </div>
+  <script>
+    // Weather icon mapping
+    const ICON_MAP = {
+      "clear-day": 'http://cs-server.usc.edu:45678/hw/hw8/images/clear.png',
+      "clear-night": 'http://cs-server.usc.edu:45678/hw/hw8/images/clear_night.png',
+      "rain": 'http://cs-server.usc.edu:45678/hw/hw8/images/rain.png',
+      "snow": 'http://cs-server.usc.edu:45678/hw/hw8/images/snow.png',
+      "sleet": 'http://cs-server.usc.edu:45678/hw/hw8/images/sleet.png',
+      "wind": 'http://cs-server.usc.edu:45678/hw/hw8/images/wind.png',
+      "fog": 'http://cs-server.usc.edu:45678/hw/hw8/images/fog.png',
+      "cloudy": 'http://cs-server.usc.edu:45678/hw/hw8/images/cloudy.png',
+      "partly-cloudy-day": 'http://cs-server.usc.edu:45678/hw/hw8/images/cloud_day.png',
+      "partly-cloudy-night": 'http://cs-server.usc.edu:45678/hw/hw8/images/cloud_night.png'
+    };
+
+    // Helpers
+    function getIconUrl(icon) {
+      return ICON_MAP[icon] || ICON_MAP['clear-day'];
+    }
+    function formatTemp(temp, units) {
+      return units === 'si'
+        ? `${((temp - 32) * 5 / 9).toFixed(1)} °C`
+        : `${temp} °F`;
+    }
+    function formatWind(wind, units) {
+      return units === 'si'
+        ? `${(wind * 0.44704).toFixed(2)} m/s`
+        : `${wind} mph`;
+    }
+    function formatVisibility(vis, units) {
+      return units === 'si'
+        ? `${(vis * 1.60934).toFixed(2)} km`
+        : `${vis} mi`;
+    }
+
+    // Bootstrap 5 form validation
+    (function () {
+      'use strict';
+      const form = document.getElementById('forecast-form');
+      form.addEventListener('submit', function (event) {
+        event.preventDefault();
+        event.stopPropagation();
+        if (form.checkValidity()) {
+          fetchWeather();
+        }
+        form.classList.add('was-validated');
+      }, false);
+    })();
+
+    // Main weather fetcher
+    async function fetchWeather() {
+      const address = document.getElementById('address').value.trim();
+      const city = document.getElementById('city').value.trim();
+      const state = document.getElementById('state').value;
+      const units = document.querySelector('input[name="units"]:checked').value;
+
+      // Show loading spinner if you want
+      try {
+        // Use your actual endpoint here!
+        const res = await fetch(`http://cs-server.usc.edu:30980/index.php?address=${encodeURIComponent(address)}&city=${encodeURIComponent(city)}&state=${encodeURIComponent(state)}&temperature=${units}`, {
+          method: 'GET'
+        });
+        const result = await res.json();
+        // Some APIs wrap JSON as a string, fix if so:
+        const output = typeof result === 'string' ? JSON.parse(result) : result;
+        renderWeather(output, city, state, units);
+      } catch (e) {
+        alert('Failed to fetch weather data. Please try again.');
+      }
+    }
+
+    function renderWeather(output, city, state, units) {
+      document.getElementById('weather-result').classList.remove('d-none');
+      // Current weather
+      const cur = output.currently;
+      const daily = output.daily.data[0];
+      document.getElementById('icon').innerHTML = `<img src="${getIconUrl(cur.icon)}" class="main-weather-icon" alt="${cur.summary}"/>`;
+      document.getElementById('summary').textContent = `${cur.summary} in ${city}, ${state}`;
+      document.getElementById('temperature').textContent = formatTemp(cur.temperature, units);
+      document.getElementById('humidity').textContent = `${(cur.humidity * 100).toFixed(0)}%`;
+      document.getElementById('dew').textContent = formatTemp(cur.dewPoint, units);
+      document.getElementById('wind').textContent = formatWind(cur.windSpeed, units);
+      document.getElementById('visibility').textContent = formatVisibility(cur.visibility, units);
+      // Precipitation intensity mapping
+      let precipitation = 'None';
+      if (cur.precipIntensity >= 0.4) precipitation = 'High';
+      else if (cur.precipIntensity >= 0.1) precipitation = 'Moderate';
+      else if (cur.precipIntensity >= 0.017) precipitation = 'Light';
+      else if (cur.precipIntensity >= 0.002) precipitation = 'Very Light';
+      document.getElementById('precipitation').textContent = precipitation;
+      document.getElementById('rain').textContent = `${(cur.precipProbability * 100).toFixed(0)}%`;
+      document.getElementById('min').textContent = 'L: ' + formatTemp(daily.temperatureMin, units);
+      document.getElementById('max').textContent = 'H: ' + formatTemp(daily.temperatureMax, units);
+      // Sunrise/sunset
+      const tz = output.timezone || 'America/Los_Angeles';
+      document.getElementById('sunrise').textContent = moment.unix(daily.sunriseTime).tz(tz).format('hh:mm A');
+      document.getElementById('sunset').textContent = moment.unix(daily.sunsetTime).tz(tz).format('hh:mm A');
+      // Map
+      renderMap(output.latitude, output.longitude);
+      // Hourly
+      renderHourly(output.hourly.data.slice(0, 20), tz, units);
+      // Facebook sharing
+      document.getElementById('fb-share').onclick = () =>
+        fbPost(cur, city, state, units, output);
+    }
+
+    function renderHourly(hours, timezone, units) {
+      const el = document.getElementById('hourly-forecast');
+      el.innerHTML = hours.map((h, i) => `
+        <div class="weather-row text-white">
+          <span class="text-nowrap">${moment.unix(h.time).tz(timezone).format('hh:mm A')}</span>
+          <img src="${getIconUrl(h.icon)}" class="weather-icon" alt="${h.summary || h.icon}">
+          <span>${Math.round(h.cloudCover * 100)}%</span>
+          <span>${formatTemp(h.temperature, units)}</span>
+        </div>
+      `).join('');
+    }
+
+    // OpenLayers Map
+    function renderMap(lat, lon) {
+      document.getElementById('map').innerHTML = '';
+      // Basic OpenLayers map
+      new ol.Map({
+        target: 'map',
+        layers: [
+          new ol.layer.Tile({
+            source: new ol.source.OSM()
+          })
+        ],
+        view: new ol.View({
+          center: ol.proj.fromLonLat([lon, lat]),
+          zoom: 10
+        })
+      });
+    }
+
+    // Facebook SDK (kept from original)
+    window.fbAsyncInit = function () {
+      FB.init({
+        appId: '872359899550503',
+        xfbml: true,
+        version: 'v2.5'
+      });
+    };
+    (function (d, s, id) {
+      var js, fjs = d.getElementsByTagName(s)[0];
+      if (d.getElementById(id)) { return; }
+      js = d.createElement(s); js.id = id;
+      js.src = "//connect.facebook.net/en_US/sdk.js";
+      fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));
+
+    function fbPost(cur, city, state, units, output) {
+      const picUrl = getIconUrl(cur.icon);
+      FB.ui({
+        method: 'feed',
+        name: `Current weather in ${city} ${state}`,
+        caption: "WEATHER INFORMATION FROM FORECAST.IO",
+        description: `${cur.summary}, ${formatTemp(cur.temperature, units)}`,
+        display: 'popup',
+        link: 'https://developers.facebook.com/docs/',
+        picture: picUrl
+      }, function (response) {
+        alert(response && response.post_id ? "Posted Successfully" : "Not Posted");
+      });
+    }
+  </script>
+</body>
+</html>
